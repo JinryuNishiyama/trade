@@ -50,6 +50,4 @@ test:
 #
 production:
   <<: *default
-  database: trade_production
-  username: trade
-  password: <%= ENV['TRADE_DATABASE_PASSWORD'] %>
+  url: <%= ENV['JAWSDB_URL']&.sub('mysql://', 'mysql2://') %>
