@@ -1,0 +1,57 @@
+<header>
+  <div class="header-contents">
+    <%= link_to "Trade", root_path, class: "website-name" %>
+  </div>
+</header>
+<div class="main">
+  <div class="main-contents">
+    <div class="game-list">
+      <p>ゲーム一覧</p>
+      <ul>
+        <% @games.each do |game| %>
+          <li>
+            <%= link_to game.name, root_path, class: "game-link" %>
+          </li>
+        <% end %>
+      </ul>
+      <%= link_to "新しいページを作成", root_path, class: "new-game-link" %>
+    </div>
+    <div class="top-main">
+      <div class="about">
+        <h1>Tradeとは？</h1>
+        <p>Tradeは、コンソールゲームやスマホゲームで他のプレイヤーとモンスターやアイテムの交換をするための掲示板です。自分の力だけでは手に入れるのが難しい、身近に交換相手がいない、そんな時はぜひTradeをご利用ください。</p>
+        <p>また、交換以外にも対戦相手やマルチプレイの仲間の募集をすることもできます。お気軽にご活用ください。</p>
+      </div>
+      <div class="how-to-use">
+        <h2>ご利用方法</h2>
+        <div class="note">
+          <p>※ご利用にはアカウント登録が必要です。アカウント登録は<%= link_to "こちら", root_path, class: "account-link" %>から</p>
+          <p>すでにアカウントをお持ちの方→ログインは<%= link_to "こちら", root_path, class: "account-link" %>から</p>
+        </div>
+        <ol>
+          <li>
+            <p>&#9312ゲームを選択</p>
+            <p>このページの左側の「ゲーム一覧」からゲームを選択します。</p>
+          </li>
+          <li>
+            <p>&#9313何をするか選択</p>
+            <p>交換、対戦、仲間募集の中から選択します。</p>
+          </li>
+          <li>
+            <p>&#9314チャットでやりとり</p>
+            <p>チャットで交換や対戦などの相手を見つけて、ゲームを楽しんでください！</p>
+          </li>
+          <li>
+            <p>ご希望のゲームがない場合…</p>
+            <p>新しく追加することができます。「新しいページを作成」からゲーム名・目的・説明文を入力してページを作成してください。</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-contents">
+    <span>&copy;</span> 2022-<%= Time.current.year %> Trade
+  </div>
+</footer>
