@@ -1,0 +1,97 @@
+/* ========== index ==========
+1. shared
+  1.1 _error_messages.html.erb
+  1.2 _links.html.erb
+2. the others
+  2.1 registrations
+    2.1.1 new.html.erb
+=========================== */
+
+/* ===========================
+  1. shared
+=========================== */
+/* ===========================
+  1.1 _error_messages.html.erb
+=========================== */
+.error-messages {
+  text-align: left;
+  border: 2px solid red;
+  margin-bottom: 20px;
+}
+
+.error-messages li {
+  margin-left: 20px;
+}
+
+/* ===========================
+  1.2 _links.html.erb
+=========================== */
+.link {
+  display: inline-block;
+  text-decoration: none;
+  color: blue;
+  margin-bottom: 20px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* ===========================
+  2. the others
+=========================== */
+/* ===========================
+  2.1 registrations
+=========================== */
+/* ===========================
+  2.1.1 new.html.erb
+=========================== */
+.account-section {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: white;
+  padding: 30px 60px;
+  margin: 0 auto;
+}
+
+.account-section h1 {
+  margin-bottom: 20px;
+}
+
+.form {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.form-label {
+  position: absolute;
+  left: 0;
+}
+
+.form-field {
+  font-size: 16px;
+  width: 300px;
+  height: 30px;
+}
+
+.form-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.form-submit {
+  cursor: pointer;
+  border: none;
+  background-color: blue;
+  color: white;
+  font-size: 16px;
+  width: 308px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.form-guest {
+  border-top: 2px solid black;
+  padding-top: 10px;
+}
