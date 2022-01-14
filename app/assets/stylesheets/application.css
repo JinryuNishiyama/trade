@@ -21,3 +21,15 @@ body, div, ul, ol, li, h1, h2, h3, p {
   margin: 0;
   padding: 0;
 }
+
+.notice {
+  background-color: #00ff00;
+  color: black;
+  font-weight: bold;
+}
+
+.alert {
+  background-color: white;
+  color: red;
+  font-weight: bold;
+}
