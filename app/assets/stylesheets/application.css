@@ -13,3 +13,11 @@
  *= require_tree .
  *= require_self
  */
+
+/* ===========================
+  application.html.erb
+=========================== */
+body, div, ul, ol, li, h1, h2, h3, p {
+  margin: 0;
+  padding: 0;
+}
