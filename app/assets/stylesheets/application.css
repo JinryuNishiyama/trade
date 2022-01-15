@@ -28,6 +28,13 @@ body, div, ul, ol, li, h1, h2, h3, p {
   padding: 0;
 }
 
+body {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding-bottom: 38px;
+}
+
 .notice {
   background-color: #00ff00;
   color: black;
@@ -60,6 +67,9 @@ header {
 }
 
 .header-contents {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   max-width: 1140px;
   margin: 0 auto;
 }
@@ -78,13 +88,34 @@ header {
   transition-duration: 0.2s;
 }
 
+.header-link {
+  transition-duration: 0.2s;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.header-link:last-of-type {
+  margin-right: 40px;
+}
+
+.header-link:hover {
+  opacity: 0.7;
+  transition-duration: 0.2s;
+}
+
 /* ===========================
   1.2 _footer.html.erb
 =========================== */
 footer {
+  position: absolute;
+  bottom: 0;
   background-color: #00bfff;
   color: white;
   font-size: 12px;
+  width: 100%;
+  height: 18px;
   padding: 10px;
 }
 
