@@ -3,8 +3,11 @@
   1.1 _error_messages.html.erb
   1.2 _links.html.erb
 2. the others
-  2.1 registrations
-    2.1.1 new.html.erb
+  2.1 COMMON
+  2.2 registrations
+    2.2.1 new.html.erb
+  2.3 sessions
+    2.3.1 new.html.erb
 =========================== */
 
 /* ===========================
@@ -41,10 +44,7 @@
   2. the others
 =========================== */
 /* ===========================
-  2.1 registrations
-=========================== */
-/* ===========================
-  2.1.1 new.html.erb
+  2.1 COMMON
 =========================== */
 .account-section {
   display: flex;
@@ -75,11 +75,6 @@
   height: 30px;
 }
 
-.form-checkbox {
-  width: 16px;
-  height: 16px;
-}
-
 .form-submit {
   cursor: pointer;
   border: none;
@@ -91,7 +86,26 @@
   margin-top: 10px;
 }
 
-.form-guest {
+/* ===========================
+  2.3 sessions
+=========================== */
+/* ===========================
+  2.3.1 new.html.erb
+=========================== */
+.form-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.guest {
   border-top: 2px solid black;
   padding-top: 10px;
+}
+
+.guest-link {
+  display: block;
+  text-decoration: none;
+  background-color: blue;
+  color: white;
+  padding: 10px;
 }

@@ -40,4 +40,12 @@ RSpec.describe User, type: :model do
       expect(another_user.errors[:email]).to include "has already been taken"
     end
   end
+
+  describe "self.guestメソッド" do
+    it "ゲストユーザーを作成できること" do
+      guest_user = User.guest
+      expect(guest_user.email).to eq "guest@example.com"
+      expect(guest_user.name).to eq "ゲストユーザー"
+    end
+  end
 end
