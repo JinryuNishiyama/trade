@@ -30,4 +30,42 @@ RSpec.describe "Users", type: :system do
       end
     end
   end
+
+  describe "ログインページ" do
+    let!(:user) { create(:user) }
+
+    before do
+      visit new_user_session_path
+    end
+
+    describe "ページ遷移テスト" do
+      it "必要事項を入力して「ログイン」をクリックすると、ログインしてトップページに遷移すること" do
+        sign_in_as(user)
+        expect(current_path).to eq root_path
+        expect(page).to have_content "Signed in successfully."
+      end
+
+      it "「新規登録」をクリックすると、アカウント登録ページに遷移すること" do
+        within ".account-section" do
+          click_on "新規登録"
+        end
+        expect(current_path).to eq new_user_registration_path
+      end
+
+      it "「パスワードをお忘れの場合」をクリックすると、パスワード再設定のためのメール送信ページに遷移すること" do
+        within ".account-section" do
+          click_on "パスワードをお忘れの場合"
+        end
+        expect(current_path).to eq new_user_password_path
+      end
+
+      it "「ゲストユーザーでログイン」をクリックすると、ログインしてトップページに遷移すること" do
+        within ".account-section" do
+          click_on "ゲストユーザーでログイン"
+        end
+        expect(current_path).to eq root_path
+        expect(page).to have_content "ゲストユーザーとしてログインしました"
+      end
+    end
+  end
 end
