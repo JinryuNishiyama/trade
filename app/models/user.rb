@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
+  mount_uploader :icon, ImageUploader
+
   def self.guest
     find_or_create_by!(email: "guest@example.com") do |user|
       user.name = "ゲストユーザー"
