@@ -4,4 +4,11 @@ FactoryBot.define do
     sequence(:email) { |n| "test#{n}@example.com" }
     password { "testuser" }
   end
+
+  factory :user_with_icon, class: "User" do
+    name { "テストユーザー" }
+    icon { Rack::Test::UploadedFile.new("#{Rails.root}/spec/factories/test.jpeg", "image/jpeg") }
+    sequence(:email) { |n| "icon-test#{n}@example.com" }
+    password { "testuser" }
+  end
 end
