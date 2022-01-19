@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe "Games", type: :request do
   let!(:game) { create(:game) }
   let(:user) { create(:user) }
+  let(:user_with_icon) { create(:user_with_icon) }
 
   describe "GET #index" do
     before do
@@ -25,9 +26,28 @@ RSpec.describe "Games", type: :request do
     end
 
     context "ログインしている場合" do
-      it "レスポンスに「ログアウト」が含まれること" do
+      context "アイコン画像未登録の場合" do
+        it "レスポンスにユーザー名とアイコン画像が含まれること" do
+          sign_in user
+          get root_path
+          expect(response.body).to include user.name
+          expect(response.body).to include "default_icon"
+        end
+      end
+
+      context "アイコン画像登録済みの場合" do
+        it "レスポンスにユーザー名とアイコン画像が含まれること" do
+          sign_in user_with_icon
+          get root_path
+          expect(response.body).to include user_with_icon.name
+          expect(response.body).to include "test.jpeg"
+        end
+      end
+
+      it "レスポンスに「ユーザー情報の編集」・「ログアウト」が含まれること" do
         sign_in user
         get root_path
+        expect(response.body).to include "ユーザー情報の編集"
         expect(response.body).to include "ログアウト"
       end
     end
