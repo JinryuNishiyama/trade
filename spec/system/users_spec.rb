@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :system do
+RSpec.describe "Users", type: :system, js: true do
   describe "アカウント登録ページ" do
     let(:user) { build(:user) }
 
@@ -32,7 +32,7 @@ RSpec.describe "Users", type: :system do
   end
 
   describe "ログインページ" do
-    let!(:user) { create(:user) }
+    let(:user) { create(:user) }
 
     before do
       visit new_user_session_path
@@ -65,6 +65,85 @@ RSpec.describe "Users", type: :system do
         end
         expect(current_path).to eq root_path
         expect(page).to have_content "ゲストユーザーとしてログインしました"
+      end
+    end
+  end
+
+  describe "ユーザー情報編集ページ" do
+    let(:user) { create(:user) }
+
+    describe "表示テスト" do
+      context "アイコン画像未登録の場合" do
+        before do
+          sign_in_as(user)
+          visit edit_user_registration_path
+        end
+
+        it "アイコン画像を削除するためのチェックボックスが表示されないこと" do
+          expect(page).not_to have_content "アイコン画像をデフォルトに戻す"
+        end
+      end
+
+      context "アイコン画像登録済みの場合" do
+        before do
+          sign_in_as(user)
+          configure_icon(user)
+          visit edit_user_registration_path
+        end
+
+        it "アイコン画像を削除するためのチェックボックスが表示されること" do
+          expect(page).to have_content "アイコン画像をデフォルトに戻す"
+        end
+      end
+    end
+
+    describe "ページ遷移テスト" do
+      context "アイコン画像未登録の場合" do
+        before do
+          sign_in_as(user)
+          visit edit_user_registration_path
+        end
+
+        it "変更したい項目と現在のパスワードを入力して「更新」をクリックすると、ユーザー情報が更新されてトップページに遷移すること" do
+          configure_icon(user)
+          expect(current_path).to eq root_path
+          expect(page).to have_content "Your account has been updated successfully."
+        end
+
+        it "「アカウント削除」をクリックすると、確認ダイアログが表示されること" do
+          page.dismiss_confirm("アカウントを削除します、よろしいですか？") do
+            within ".delete-account" do
+              click_on "アカウント削除"
+            end
+          end
+        end
+
+        it "「アカウント削除」をクリックし、表示された確認ダイアログで「OK」をクリックすると、アカウントが削除されること" do
+          expect do
+            page.accept_confirm("アカウントを削除します、よろしいですか？") do
+              within ".delete-account" do
+                click_on "アカウント削除"
+              end
+            end
+            expect(current_path).to eq root_path
+            expect(page).to have_content "Your account has been successfully cancelled."
+          end.to change { User.count }.by(-1)
+        end
+      end
+
+      context "アイコン画像登録済みの場合" do
+        before do
+          sign_in_as(user)
+          configure_icon(user)
+          visit edit_user_registration_path
+        end
+
+        it "「アイコン画像をデフォルトに戻す」にチェックを入れてユーザー情報を更新すると、アイコン画像が削除されること" do
+          unconfigure_icon(user)
+          expect(current_path).to eq root_path
+          expect(page).to have_content "Your account has been updated successfully."
+          expect(user.icon.url).to eq nil
+        end
       end
     end
   end
