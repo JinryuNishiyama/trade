@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.2.0
   node: circleci/node@5.0.0
+  browser-tools: circleci/browser-tools@1.2.4
 
 jobs:
   rubocop:
@@ -26,8 +27,6 @@ jobs:
           MYSQL_DATABASE: trade_test
           MYSQL_USER: user
           MYSQL_PASSWORD: userpass
-      - image: seleniarm/standalone-chromium
-        name: selenium_chrome
     environment:
       BUNDLE_JOBS: "3"
       BUNDLE_RETRY: "3"
@@ -37,6 +36,11 @@ jobs:
       - ruby/install-deps
       - node/install-packages:
           pkg-manager: yarn
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          name: Replace capybara.rb
+          command: mv ./spec/for_circleci/capybara.rb ./spec/support
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
