@@ -1,3 +1,12 @@
-<div>
-  <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "header-link" %>
+<div class="header-logged-in">
+  <% if current_user.icon? %>
+    <%= image_tag current_user.icon.url, class: "user-icon" %>
+  <% else %>
+    <%= image_tag "default_icon.jpeg", class: "user-icon" %>
+  <% end %>
+  <span class="user-name"><%= current_user.name %></span>
+</div>
+<div class="header-box">
+  <%= link_to "ユーザー情報の編集", edit_user_registration_path, class: "header-box-link" %>
+  <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "header-box-link" %>
 </div>
