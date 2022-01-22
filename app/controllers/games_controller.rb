@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  before_action :exclude_not_logged_in_user, except: :index
+
   def index
     @games = Game.all
   end
@@ -20,6 +22,6 @@ class GamesController < ApplicationController
   private
 
   def game_params
-    params.require(:game).permit(:name, :purpose, :description)
+    params.require(:game).permit(:name, :purpose, :description).merge(user_id: current_user.id)
   end
 end
