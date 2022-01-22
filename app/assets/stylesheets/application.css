@@ -15,16 +15,21 @@
  */
 
 /* ========== index ==========
-1. application.html.erb
-  1.1 _header.html.erb
-    1.1.1 _not_logged_in.html.erb
-    1.1.2 _logged_in.html.erb
-  1.2 _footer.html.erb
-2. _error_messages.html.erb
+1. layouts
+  1.1 application.html.erb
+2. shared
+  2.1 _header.html.erb
+  2.2 _footer.html.erb
+  2.3 _not_logged_in.html.erb
+  2.4 _logged_in.html.erb
+  2.5 _error_messages.html.erb
 =========================== */
 
 /* ===========================
-  1. application.html.erb
+  1. layouts
+=========================== */
+/* ===========================
+  1.1 application.html.erb
 =========================== */
 body, div, ul, ol, li, h1, h2, h3, p {
   margin: 0;
@@ -58,15 +63,19 @@ body {
 .main-contents {
   display: flex;
   max-width: 1140px;
+  padding: 0 20px;
   margin: 0 auto;
 }
 
 /* ===========================
-  1.1 _header.html.erb
+  2. shared
+=========================== */
+/* ===========================
+  2.1 _header.html.erb
 =========================== */
 header {
   background-color: #00bfff;
-  padding: 10px;
+  padding: 10px 20px;
 }
 
 .header-contents {
@@ -85,7 +94,7 @@ header {
   color: white;
   font-size: 32px;
   font-weight: bold;
-  margin-left: 30px;
+  margin-left: 40px;
 }
 
 .website-name:hover {
@@ -94,7 +103,31 @@ header {
 }
 
 /* ===========================
-  1.1.1 _not_logged_in.html.erb
+  2.2 _footer.html.erb
+=========================== */
+footer {
+  position: absolute;
+  bottom: 0;
+  background-color: #00bfff;
+  color: white;
+  font-size: 12px;
+  width: calc(100% - 20px);
+  height: 18px;
+  padding: 10px;
+}
+
+.footer-contents {
+  text-align: center;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.footer-contents span {
+  font-family: "Times New Roman", sans-serif;
+}
+
+/* ===========================
+  2.3 _not_logged_in.html.erb
 =========================== */
 .header-link {
   transition-duration: 0.2s;
@@ -114,7 +147,7 @@ header {
 }
 
 /* ===========================
-  1.1.2 _logged_in.html.erb
+  2.4 _logged_in.html.erb
 =========================== */
 .header-logged-in {
   cursor: pointer;
@@ -122,6 +155,7 @@ header {
   align-items: center;
   border: 2px solid white;
   padding: 5px;
+  margin-right: 20px;
 }
 
 .user-icon {
@@ -138,8 +172,8 @@ header {
 
 .header-box {
   position: absolute;
-  top: 84px;
-  right: 0;
+  top: 74px;
+  right: 20px;
   display: none;
   background-color: #eedcb3;
   padding: 20px;
@@ -153,31 +187,7 @@ header {
 }
 
 /* ===========================
-  1.2 _footer.html.erb
-=========================== */
-footer {
-  position: absolute;
-  bottom: 0;
-  background-color: #00bfff;
-  color: white;
-  font-size: 12px;
-  width: 100%;
-  height: 18px;
-  padding: 10px;
-}
-
-.footer-contents {
-  text-align: center;
-  max-width: 1140px;
-  margin: 0 auto;
-}
-
-.footer-contents span {
-  font-family: "Times New Roman", sans-serif;
-}
-
-/* ===========================
-  2. _error_messages.html.erb
+  2.5 _error_messages.html.erb
 =========================== */
 .error-messages {
   text-align: left;
