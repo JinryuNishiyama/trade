@@ -4,6 +4,7 @@
 
 /* ========== index ==========
 1. index.html.erb
+2. new.html.erb
 =========================== */
 
 /* ===========================
@@ -114,5 +115,75 @@
 }
 
 .how-to-use ol li:last-child {
+  margin-top: 10px;
+}
+
+/* ===========================
+  2. new.html.erb
+=========================== */
+.new-game-section {
+  background-color: white;
+  width: 100%;
+  padding: 40px;
+}
+
+.new-game-section h1 {
+  margin-bottom: 20px;
+}
+
+.new-game-section > p {
+  margin-bottom: 10px;
+}
+
+.new-game-section ol {
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+
+.new-game-section ol li p:last-of-type {
+  text-indent: 1em;
+}
+
+.new-game-form {
+  text-align: left;
+}
+
+.new-game-form table {
+  border-collapse: collapse;
+}
+
+.new-game-form th, .new-game-form td {
+  padding: 10px;
+}
+
+.new-game-label {
+}
+
+.new-game-field {
+  font-size: 16px;
+  width: 300px;
+  height: 30px;
+}
+
+.new-game-select-field {
+  font-size: 16px;
+  width: 308px;
+  height: 36px;
+}
+
+.new-game-text-area {
+  font-size: 16px;
+  width: 302px;
+  height: 90px;
+}
+
+.new-game-button {
+  cursor: pointer;
+  border: none;
+  background-color: blue;
+  color: white;
+  font-size: 16px;
+  width: 434px;
+  padding: 10px;
   margin-top: 10px;
 }
