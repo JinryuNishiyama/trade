@@ -20,6 +20,7 @@
     1.1.1 _not_logged_in.html.erb
     1.1.2 _logged_in.html.erb
   1.2 _footer.html.erb
+2. _error_messages.html.erb
 =========================== */
 
 /* ===========================
@@ -173,4 +174,17 @@ footer {
 
 .footer-contents span {
   font-family: "Times New Roman", sans-serif;
+}
+
+/* ===========================
+  2. _error_messages.html.erb
+=========================== */
+.error-messages {
+  text-align: left;
+  border: 2px solid red;
+  margin-bottom: 20px;
+}
+
+.error-messages li {
+  margin-left: 20px;
 }
