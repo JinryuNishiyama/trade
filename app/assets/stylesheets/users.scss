@@ -1,7 +1,6 @@
 /* ========== index ==========
 1. shared
-  1.1 _error_messages.html.erb
-  1.2 _links.html.erb
+  1.1 _links.html.erb
 2. the others
   2.1 COMMON
   2.2 registrations
@@ -15,20 +14,7 @@
   1. shared
 =========================== */
 /* ===========================
-  1.1 _error_messages.html.erb
-=========================== */
-.error-messages {
-  text-align: left;
-  border: 2px solid red;
-  margin-bottom: 20px;
-}
-
-.error-messages li {
-  margin-left: 20px;
-}
-
-/* ===========================
-  1.2 _links.html.erb
+  1.1 _links.html.erb
 =========================== */
 .link {
   display: inline-block;
