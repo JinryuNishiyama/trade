@@ -1,7 +1,10 @@
 class Game < ApplicationRecord
   belongs_to :user
 
-  validates :name, presence: true
-  validates :purpose, presence: true
-  validates :description, presence: true
+  with_options presence: true do
+    validates :name
+    validates :purpose
+    validates :description
+    validates :user_id
+  end
 end
