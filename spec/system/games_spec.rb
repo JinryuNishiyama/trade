@@ -96,6 +96,12 @@ RSpec.describe "Games", type: :system, js: true do
           end
           expect(current_path).to eq new_user_session_path
         end
+
+        it "「新しいページを作成」をクリックすると、ログインページに遷移し、エラーメッセージが表示されること" do
+          click_on "新しいページを作成"
+          expect(page).to have_content "ログインしてください"
+          expect(current_path).to eq new_user_session_path
+        end
       end
 
       context "ログインしている場合" do
@@ -138,6 +144,11 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_content "You are already signed in."
           expect(current_path).to eq root_path
         end
+
+        it "「新しいページを作成」をクリックすると、掲示板作成ページに遷移すること" do
+          click_on "新しいページを作成"
+          expect(current_path).to eq new_game_path
+        end
       end
 
       context "ゲストユーザーでログインしている場合" do
@@ -150,6 +161,48 @@ RSpec.describe "Games", type: :system, js: true do
           click_on "ユーザー情報の編集"
           expect(page).to have_content "ゲストユーザーの情報は変更できません"
           expect(current_path).to eq root_path
+        end
+      end
+    end
+  end
+
+  describe "掲示板作成ページ" do
+    let(:invalid_game) { build(:game, :invalid) }
+
+    before do
+      sign_in_as(user)
+      visit new_game_path
+    end
+
+    describe "ページ遷移テスト" do
+      it "ヘッダー内の「Trade」をクリックすると、トップページに遷移すること" do
+        within "header" do
+          click_on "Trade"
+          expect(current_path).to eq root_path
+        end
+      end
+
+      it "必要事項を入力して「作成」をクリックすると、登録に成功してトップページに遷移すること" do
+        within ".new-game-form" do
+          fill_in "ゲーム名", with: game.name
+          select "交換", from: "ページの用途"
+          fill_in "ページの説明", with: game.description
+          click_on "作成"
+        end
+        expect(page).to have_content "新しいページを作成しました"
+        expect(current_path).to eq root_path
+      end
+
+      it "入力漏れがある状態で「作成」をクリックすると、登録に失敗し、newテンプレートが表示されること" do
+        within ".new-game-form" do
+          fill_in "ゲーム名", with: invalid_game.name
+          select "交換", from: "ページの用途"
+          fill_in "ページの説明", with: invalid_game.description
+          click_on "作成"
+        end
+        expect(page).to have_content "ページを作成できませんでした"
+        within ".new-game-section h1" do
+          expect(page).to have_content "新しいページを作成"
         end
       end
     end
