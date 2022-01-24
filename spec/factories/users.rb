@@ -7,7 +7,7 @@ FactoryBot.define do
 
   factory :user_with_icon, class: "User" do
     name { "テストユーザー" }
-    icon { Rack::Test::UploadedFile.new("#{Rails.root}/spec/factories/test.jpeg", "image/jpeg") }
+    icon { Rack::Test::UploadedFile.new("#{Rails.root}/spec/factories/test.jpg", "image/jpeg") }
     sequence(:email) { |n| "icon-test#{n}@example.com" }
     password { "testuser" }
   end

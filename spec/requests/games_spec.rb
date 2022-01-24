@@ -42,7 +42,7 @@ RSpec.describe "Games", type: :request do
           sign_in user_with_icon
           get root_path
           expect(response.body).to include user_with_icon.name
-          expect(response.body).to include "test.jpeg"
+          expect(response.body).to include "test.jpg"
         end
       end
 
