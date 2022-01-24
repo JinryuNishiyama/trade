@@ -26,7 +26,7 @@ RSpec.describe "Games", type: :system, js: true do
         it "ヘッダー内にユーザーの名前とアイコン画像が表示されないこと" do
           within "header" do
             expect(page).not_to have_content user.name
-            expect(page).not_to have_selector "img[src$='test.jpeg']"
+            expect(page).not_to have_selector "img[src$='test.jpg']"
           end
         end
       end
@@ -60,7 +60,7 @@ RSpec.describe "Games", type: :system, js: true do
           it "ヘッダー内にユーザーの名前とアイコン画像が表示されること" do
             within "header" do
               expect(page).to have_content user.name
-              expect(page).to have_selector "img[src$='test.jpeg']"
+              expect(page).to have_selector "img[src$='test.jpg']"
             end
           end
         end
