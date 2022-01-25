@@ -1,4 +1,4 @@
-<div class="new-game-section">
+<div class="game-section">
   <h1>新しいページを作成</h1>
   <p>こちらでは、新しいページ（掲示板）を作成できます。</p>
   <ol>
@@ -16,21 +16,7 @@
     </li>
   </ol>
   <%= render "shared/error_messages", resource: @game %>
-  <%= form_with model: @game, class: "new-game-form" do |f| %>
-    <table>
-      <tr>
-        <th><%= f.label :name, "ゲーム名", class: "new-game-label" %></th>
-        <td><%= f.text_field :name, class: "new-game-field" %></td>
-      </tr>
-      <tr>
-        <th><%= f.label :purpose, "ページの用途", class: "new-game-label" %></th>
-        <td><%= f.select :purpose, ["交換", "対戦", "マルチプレイ募集"], { include_blank: "選択してください" }, { class: "new-game-select-field" } %></td>
-      </tr>
-      <tr>
-        <th><%= f.label :description, "ページの説明", class: "new-game-label" %></th>
-        <td><%= f.text_area :description, class: "new-game-text-area" %></td>
-      </tr>
-    </table>
-    <%= f.submit "作成", class: "new-game-button" %>
-  <% end %>
+  <div class="new-game-form">
+    <%= render "shared/form", model: @game %>
+  </div>
 </div>
