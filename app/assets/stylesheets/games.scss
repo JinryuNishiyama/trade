@@ -5,6 +5,8 @@
 /* ========== index ==========
 1. index.html.erb
 2. new.html.erb
+3. edit.html.erb
+4. _form.html.erb
 =========================== */
 
 /* ===========================
@@ -121,63 +123,69 @@
 /* ===========================
   2. new.html.erb
 =========================== */
-.new-game-section {
+.game-section {
   background-color: white;
   width: 100%;
   padding: 40px;
 }
 
-.new-game-section h1 {
+.game-section h1 {
   margin-bottom: 20px;
 }
 
-.new-game-section > p {
+.game-section > p {
   margin-bottom: 10px;
 }
 
-.new-game-section ol {
+.game-section ol {
   list-style-type: none;
   margin-bottom: 20px;
 }
 
-.new-game-section ol li p:last-of-type {
+.game-section ol li p:last-of-type {
   text-indent: 1em;
 }
 
-.new-game-form {
+/* ===========================
+  3. edit.html.erb
+=========================== */
+/* ===========================
+  4. _form.html.erb
+=========================== */
+.game-form {
   text-align: left;
 }
 
-.new-game-form table {
+.game-form table {
   border-collapse: collapse;
 }
 
-.new-game-form th, .new-game-form td {
+.game-form th, .game-form td {
   padding: 10px;
 }
 
-.new-game-label {
+.game-label {
 }
 
-.new-game-field {
+.game-field {
   font-size: 16px;
   width: 300px;
   height: 30px;
 }
 
-.new-game-select-field {
+.game-select-field {
   font-size: 16px;
   width: 308px;
   height: 36px;
 }
 
-.new-game-text-area {
+.game-text-area {
   font-size: 16px;
   width: 302px;
   height: 90px;
 }
 
-.new-game-button {
+.game-button {
   cursor: pointer;
   border: none;
   background-color: blue;
