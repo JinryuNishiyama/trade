@@ -19,6 +19,20 @@ class GamesController < ApplicationController
     end
   end
 
+  def edit
+    @game = Game.find(params[:id])
+  end
+
+  def update
+    @game = Game.find(params[:id])
+    if @game.update(game_params)
+      redirect_to root_path, notice: "掲示板の情報を更新しました"
+    else
+      flash.now[:alert] = "更新できませんでした"
+      render "edit"
+    end
+  end
+
   private
 
   def game_params
