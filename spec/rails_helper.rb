@@ -66,4 +66,5 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include SignInModule
   config.include EditUserModule
+  config.include FillOutFormModule
 end
