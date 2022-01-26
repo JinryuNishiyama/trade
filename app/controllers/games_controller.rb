@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :exclude_not_logged_in_user, except: :index
+  before_action :ensure_correct_user, only: [:edit, :update]
 
   def index
     @games = Game.all
@@ -19,9 +20,30 @@ class GamesController < ApplicationController
     end
   end
 
+  def edit
+    @game = Game.find(params[:id])
+  end
+
+  def update
+    @game = Game.find(params[:id])
+    if @game.update(game_params)
+      redirect_to root_path, notice: "掲示板の情報を更新しました"
+    else
+      flash.now[:alert] = "更新できませんでした"
+      render "edit"
+    end
+  end
+
   private
 
   def game_params
     params.require(:game).permit(:name, :purpose, :description).merge(user_id: current_user.id)
+  end
+
+  def ensure_correct_user
+    @game = Game.find(params[:id])
+    if @game.user_id != current_user.id
+      redirect_to root_path, alert: "他のユーザーが作成した掲示板の情報は編集できません"
+    end
   end
 end

@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Games", type: :system, js: true do
-  let!(:game) { create(:game) }
   let(:user) { create(:user) }
   let(:guest_user) { create(:user, email: "guest@example.com") }
+  let!(:game) { create(:game, user: user) }
+  let(:another_game) { create(:game) }
+  let(:invalid_game) { build(:game, :invalid, user: user) }
 
   describe "トップページ" do
     before do
@@ -167,11 +169,15 @@ RSpec.describe "Games", type: :system, js: true do
   end
 
   describe "掲示板作成ページ" do
-    let(:invalid_game) { build(:game, :invalid) }
-
     before do
       sign_in_as(user)
       visit new_game_path
+    end
+
+    describe "表示テスト" do
+      it "データを送信するボタン内に「作成」と表示されること" do
+        expect(page).to have_button "作成"
+      end
     end
 
     describe "ページ遷移テスト" do
@@ -183,27 +189,52 @@ RSpec.describe "Games", type: :system, js: true do
       end
 
       it "必要事項を入力して「作成」をクリックすると、登録に成功してトップページに遷移すること" do
-        within ".new-game-form" do
-          fill_in "ゲーム名", with: game.name
-          select "交換", from: "ページの用途"
-          fill_in "ページの説明", with: game.description
-          click_on "作成"
-        end
+        fill_out(game, "new")
         expect(page).to have_content "新しいページを作成しました"
         expect(current_path).to eq root_path
       end
 
       it "入力漏れがある状態で「作成」をクリックすると、登録に失敗し、newテンプレートが表示されること" do
-        within ".new-game-form" do
-          fill_in "ゲーム名", with: invalid_game.name
-          select "交換", from: "ページの用途"
-          fill_in "ページの説明", with: invalid_game.description
-          click_on "作成"
-        end
+        fill_out(invalid_game, "new")
         expect(page).to have_content "ページを作成できませんでした"
-        within ".new-game-section h1" do
+        within ".game-section h1" do
           expect(page).to have_content "新しいページを作成"
         end
+      end
+    end
+  end
+
+  describe "掲示板情報編集ページ" do
+    before do
+      sign_in_as(user)
+      visit edit_game_path(game.id)
+    end
+
+    describe "表示テスト" do
+      it "データを送信するボタン内に「更新」と表示されること" do
+        expect(page).to have_button "更新"
+      end
+    end
+
+    describe "ページ遷移テスト" do
+      it "必要事項を入力して「更新」をクリックすると、データの更新に成功し、トップページに遷移すること" do
+        fill_out(game, "edit")
+        expect(page).to have_content "掲示板の情報を更新しました"
+        expect(current_path).to eq root_path
+      end
+
+      it "入力漏れがある状態で「更新」をクリックすると、データの更新に失敗し、editテンプレートが表示されること" do
+        fill_out(invalid_game, "edit")
+        expect(page).to have_content "更新できませんでした"
+        within ".game-section h1" do
+          expect(page).to have_content "掲示板の情報を編集"
+        end
+      end
+
+      it "ある掲示板の作成者ではないユーザーがその掲示板の情報編集ページに遷移しようとすると、遷移せず、エラーメッセージが出力されること" do
+        visit edit_game_path(another_game.id)
+        expect(page).to have_content "他のユーザーが作成した掲示板の情報は編集できません"
+        expect(current_path).to eq root_path
       end
     end
   end

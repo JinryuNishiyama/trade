@@ -1,0 +1,17 @@
+<%= form_with model: model, class: "game-form" do |f| %>
+  <table>
+    <tr>
+      <th><%= f.label :name, "ゲーム名", class: "game-label" %></th>
+      <td><%= f.text_field :name, class: "game-field" %></td>
+    </tr>
+    <tr>
+      <th><%= f.label :purpose, "ページの用途", class: "game-label" %></th>
+      <td><%= f.select :purpose, ["交換", "対戦", "マルチプレイ募集"], { include_blank: "選択してください" }, { class: "game-select-field" } %></td>
+    </tr>
+    <tr>
+      <th><%= f.label :description, "ページの説明", class: "game-label" %></th>
+      <td><%= f.text_area :description, class: "game-text-area" %></td>
+    </tr>
+  </table>
+  <%= f.submit model.new_record? ? "作成" : "更新", class: "game-button" %>
+<% end %>
