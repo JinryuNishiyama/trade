@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Games", type: :request do
-  let!(:game) { create(:game) }
+  let!(:game) { create(:game, user: user) }
   let(:game_params) { attributes_for(:game) }
+  let(:another_game_params) { attributes_for(:game, description: "変更後説明文") }
   let(:invalid_game_params) { attributes_for(:game, :invalid) }
+  let(:invalid_another_game_params) { attributes_for(:game, :invalid, description: "変更後説明文") }
   let(:user) { create(:user) }
   let(:user_with_icon) { create(:user_with_icon) }
 
@@ -104,6 +106,71 @@ RSpec.describe "Games", type: :request do
       it "エラーが表示されること" do
         post games_path, params: { game: invalid_game_params }
         expect(response.body).to include "ページを作成できませんでした"
+      end
+    end
+  end
+
+  describe "GET #edit" do
+    before do
+      sign_in user
+      get edit_game_path(game.id)
+    end
+
+    it "リクエストが成功すること" do
+      expect(response).to have_http_status(200)
+    end
+
+    it "ゲーム名が表示されること" do
+      expect(response.body).to include game.name
+    end
+
+    it "ページの用途が表示されること" do
+      expect(response.body).to include game.purpose
+    end
+
+    it "ページの説明が表示されること" do
+      expect(response.body).to include game.description
+    end
+  end
+
+  describe "PATCH #update" do
+    before do
+      sign_in user
+    end
+
+    context "パラメータが有効である場合" do
+      it "リクエストが成功すること" do
+        patch game_path(game.id), params: { game: game_params }
+        expect(response).to have_http_status(302)
+      end
+
+      it "データが更新されること" do
+        expect do
+          patch game_path(game.id), params: { game: another_game_params }
+        end.to change { Game.find(game.id).description }.from("テスト用説明文です。").to("変更後説明文")
+      end
+
+      it "リダイレクトされること" do
+        patch game_path(game.id), params: { game: game_params }
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context "パラメータが無効である場合" do
+      it "リクエストが成功すること" do
+        patch game_path(game.id), params: { game: invalid_game_params }
+        expect(response).to have_http_status(200)
+      end
+
+      it "データが更新されないこと" do
+        expect do
+          patch game_path(game.id), params: { game: invalid_another_game_params }
+        end.not_to change { Game.find(game.id).description }
+      end
+
+      it "エラーが表示されること" do
+        patch game_path(game.id), params: { game: invalid_game_params }
+        expect(response.body).to include "更新できませんでした"
       end
     end
   end
