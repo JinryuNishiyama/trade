@@ -1,0 +1,20 @@
+<div class="game-list-section">
+  <h1>作成した掲示板一覧</h1>
+  <h3>合計<span class="game-count"><%= @games.count %></span>件</h3>
+  <table>
+    <tr>
+      <th>ゲーム名</th>
+      <th>ページの用途</th>
+      <th>ページの説明</th>
+      <th>編集</th>
+    </tr>
+    <% @games.each do |game| %>
+      <tr>
+        <td><%= game.name %></td>
+        <td><%= game.purpose %></td>
+        <td><%= game.description %></td>
+        <td><%= link_to "編集", edit_game_path(game), class: "edit-game-link" %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
