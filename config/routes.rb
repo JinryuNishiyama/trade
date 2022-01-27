@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   root 'games#index'
+
+  get 'games/list'
   resources :games
 
   devise_for :users
