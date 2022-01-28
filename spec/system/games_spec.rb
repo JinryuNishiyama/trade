@@ -35,13 +35,6 @@ RSpec.describe "Games", type: :system, js: true do
           sign_in_as(user)
         end
 
-        it "ヘッダー内に「ログイン」・「新規登録」が表示されないこと" do
-          within "header" do
-            expect(page).not_to have_content "ログイン"
-            expect(page).not_to have_content "新規登録"
-          end
-        end
-
         context "アイコン画像未登録の場合" do
           it "ヘッダー内にユーザーの名前とデフォルトのアイコン画像が表示されること" do
             within "header" do
@@ -61,6 +54,21 @@ RSpec.describe "Games", type: :system, js: true do
               expect(page).to have_content user.name
               expect(page).to have_selector "img[src$='test.jpg']"
             end
+          end
+        end
+
+        it "ヘッダー内のユーザー名またはアイコン画像をクリックすると、メニューボックスが表示されること" do
+          find(".header-logged-in").click
+          expect(page).to have_css ".header-box"
+          expect(page).to have_content "ユーザー情報の編集"
+          expect(page).to have_content "作成した掲示板一覧"
+          expect(page).to have_content "ログアウト"
+        end
+
+        it "ヘッダー内に「ログイン」・「新規登録」が表示されないこと" do
+          within "header" do
+            expect(page).not_to have_content "ログイン"
+            expect(page).not_to have_content "新規登録"
           end
         end
       end
@@ -108,17 +116,16 @@ RSpec.describe "Games", type: :system, js: true do
           sign_in_as(user)
         end
 
-        it "ヘッダー内のユーザー名またはアイコン画像をクリックすると、メニューボックスが表示されること" do
-          find(".header-logged-in").click
-          expect(page).to have_css ".header-box"
-          expect(page).to have_content "ユーザー情報の編集"
-          expect(page).to have_content "ログアウト"
-        end
-
         it "メニューボックス内の「ユーザー情報の編集」をクリックすると、ユーザー情報編集ページに遷移すること" do
           find(".header-logged-in").click
           click_on "ユーザー情報の編集"
           expect(current_path).to eq edit_user_registration_path
+        end
+
+        it "メニューボックス内の「作成した掲示板一覧」をクリックすると、掲示板一覧ページに遷移すること" do
+          find(".header-logged-in").click
+          click_on "作成した掲示板一覧"
+          expect(current_path).to eq games_list_path
         end
 
         it "メニューボックス内の「ログアウト」をクリックすると、ログアウトしてメッセージが表示されること" do
@@ -211,7 +218,7 @@ RSpec.describe "Games", type: :system, js: true do
 
     before do
       sign_in_as(user)
-      visit edit_game_path(game.id)
+      visit edit_game_path(game)
     end
 
     describe "表示テスト" do
@@ -236,9 +243,48 @@ RSpec.describe "Games", type: :system, js: true do
       end
 
       it "ある掲示板の作成者ではないユーザーがその掲示板の情報編集ページに遷移しようとすると、遷移せず、エラーメッセージが出力されること" do
-        visit edit_game_path(another_game.id)
+        visit edit_game_path(another_game)
         expect(page).to have_content "他のユーザーが作成した掲示板の情報は編集できません"
         expect(current_path).to eq root_path
+      end
+    end
+  end
+
+  describe "掲示板一覧ページ" do
+    let(:another_user) { create(:user) }
+    let!(:another_game) { create(:another_game, user: another_user) }
+
+    before do
+      sign_in_as(user)
+      visit games_list_path
+    end
+
+    describe "表示テスト" do
+      it "作成した掲示板の数の合計が表示されること" do
+        within ".game-list-section h3" do
+          expect(page).to have_content user.games.count
+        end
+      end
+
+      it "作成した掲示板の情報が表示されること" do
+        expect(page).to have_content user.games.first.name
+        expect(page).to have_content user.games.first.purpose
+        expect(page).to have_content user.games.first.description
+      end
+
+      it "他のユーザーが作成した掲示板の情報が表示されないこと" do
+        expect(page).not_to have_content another_user.games.first.name
+        expect(page).not_to have_content another_user.games.first.purpose
+        expect(page).not_to have_content another_user.games.first.description
+      end
+    end
+
+    describe "ページ遷移テスト" do
+      it "「編集」をクリックすると、掲示板情報編集ページに遷移すること" do
+        within ".game-list-section" do
+          click_on "編集"
+        end
+        expect(current_path).to eq edit_game_path(game)
       end
     end
   end
