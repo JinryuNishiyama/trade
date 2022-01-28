@@ -87,7 +87,7 @@ RSpec.describe "Users", type: :system, js: true do
       context "アイコン画像登録済みの場合" do
         before do
           sign_in_as(user)
-          configure_icon(user)
+          edit(user, "add_icon")
           visit edit_user_registration_path
         end
 
@@ -105,7 +105,7 @@ RSpec.describe "Users", type: :system, js: true do
         end
 
         it "変更したい項目と現在のパスワードを入力して「更新」をクリックすると、ユーザー情報が更新されてトップページに遷移すること" do
-          configure_icon(user)
+          edit(user, "add_icon")
           expect(current_path).to eq root_path
           expect(page).to have_content "Your account has been updated successfully."
         end
@@ -134,12 +134,12 @@ RSpec.describe "Users", type: :system, js: true do
       context "アイコン画像登録済みの場合" do
         before do
           sign_in_as(user)
-          configure_icon(user)
+          edit(user, "add_icon")
           visit edit_user_registration_path
         end
 
         it "「アイコン画像をデフォルトに戻す」にチェックを入れてユーザー情報を更新すると、アイコン画像が削除されること" do
-          unconfigure_icon(user)
+          edit(user, "remove_icon")
           expect(current_path).to eq root_path
           expect(page).to have_content "Your account has been updated successfully."
           expect(user.icon.url).to eq nil
