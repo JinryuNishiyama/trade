@@ -1,15 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "Games", type: :request do
-  let!(:game) { create(:game, user: user) }
-  let(:game_params) { attributes_for(:game) }
-  let(:another_game_params) { attributes_for(:game, description: "変更後説明文") }
-  let(:invalid_game_params) { attributes_for(:game, :invalid) }
-  let(:invalid_another_game_params) { attributes_for(:game, :invalid, description: "変更後説明文") }
   let(:user) { create(:user) }
-  let(:user_with_icon) { create(:user_with_icon) }
+  let!(:game) { create(:game, user: user) }
 
   describe "GET #index" do
+    let(:user_with_icon) { create(:user, :with_icon) }
+
     before do
       get root_path
     end
@@ -69,6 +66,9 @@ RSpec.describe "Games", type: :request do
   end
 
   describe "POST #create" do
+    let(:game_params) { attributes_for(:game) }
+    let(:invalid_game_params) { attributes_for(:game, :invalid) }
+
     before do
       sign_in user
     end
@@ -134,6 +134,11 @@ RSpec.describe "Games", type: :request do
   end
 
   describe "PATCH #update" do
+    let(:game_params) { attributes_for(:game) }
+    let(:invalid_game_params) { attributes_for(:game, :invalid) }
+    let(:game_params_after_change) { attributes_for(:game_after_change) }
+    let(:invalid_game_params_after_change) { attributes_for(:game_after_change, :invalid) }
+
     before do
       sign_in user
     end
@@ -146,8 +151,8 @@ RSpec.describe "Games", type: :request do
 
       it "データが更新されること" do
         expect do
-          patch game_path(game.id), params: { game: another_game_params }
-        end.to change { Game.find(game.id).description }.from("テスト用説明文です。").to("変更後説明文")
+          patch game_path(game.id), params: { game: game_params_after_change }
+        end.to change { Game.find(game.id).name }.from("テストゲーム").to("変更後テストゲーム")
       end
 
       it "リダイレクトされること" do
@@ -164,14 +169,40 @@ RSpec.describe "Games", type: :request do
 
       it "データが更新されないこと" do
         expect do
-          patch game_path(game.id), params: { game: invalid_another_game_params }
-        end.not_to change { Game.find(game.id).description }
+          patch game_path(game.id), params: { game: invalid_game_params_after_change }
+        end.not_to change { Game.find(game.id).name }
       end
 
       it "エラーが表示されること" do
         patch game_path(game.id), params: { game: invalid_game_params }
         expect(response.body).to include "更新できませんでした"
       end
+    end
+  end
+
+  describe "GET #list" do
+    let(:another_user) { create(:user) }
+    let!(:another_game) { create(:another_game, user: another_user) }
+
+    before do
+      sign_in user
+      get games_list_path
+    end
+
+    it "リクエストが成功すること" do
+      expect(response).to have_http_status(200)
+    end
+
+    it "作成した掲示板の情報が表示されること" do
+      expect(response.body).to include user.games.first.name
+      expect(response.body).to include user.games.first.purpose
+      expect(response.body).to include user.games.first.description
+    end
+
+    it "他のユーザーが作成した掲示板の情報が表示されないこと" do
+      expect(response.body).not_to include another_user.games.first.name
+      expect(response.body).not_to include another_user.games.first.purpose
+      expect(response.body).not_to include another_user.games.first.description
     end
   end
 end
