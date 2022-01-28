@@ -2,10 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Games", type: :system, js: true do
   let(:user) { create(:user) }
-  let(:guest_user) { create(:user, email: "guest@example.com") }
   let!(:game) { create(:game, user: user) }
-  let(:another_game) { create(:game) }
-  let(:invalid_game) { build(:game, :invalid, user: user) }
 
   describe "トップページ" do
     before do
@@ -56,7 +53,7 @@ RSpec.describe "Games", type: :system, js: true do
 
         context "アイコン画像登録済みの場合" do
           before do
-            configure_icon(user)
+            edit(user, "add_icon")
           end
 
           it "ヘッダー内にユーザーの名前とアイコン画像が表示されること" do
@@ -154,6 +151,8 @@ RSpec.describe "Games", type: :system, js: true do
       end
 
       context "ゲストユーザーでログインしている場合" do
+        let(:guest_user) { create(:user, :guest) }
+
         before do
           sign_in_as(guest_user)
         end
@@ -169,6 +168,8 @@ RSpec.describe "Games", type: :system, js: true do
   end
 
   describe "掲示板作成ページ" do
+    let(:invalid_game) { build(:game, :invalid, user: user) }
+
     before do
       sign_in_as(user)
       visit new_game_path
@@ -205,6 +206,9 @@ RSpec.describe "Games", type: :system, js: true do
   end
 
   describe "掲示板情報編集ページ" do
+    let(:invalid_game) { build(:game, :invalid, user: user) }
+    let(:another_game) { create(:another_game) }
+
     before do
       sign_in_as(user)
       visit edit_game_path(game.id)
