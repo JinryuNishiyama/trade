@@ -1,0 +1,22 @@
+<div class="chat-section">
+  <h1><span><%= @game.name %></span><%= @game.purpose %>掲示板</h1>
+  <p><%= @game.description %></p>
+  <%= form_with model: [@game, @post], class: "chat-form" do |f| %>
+    <h3>投稿する</h3>
+    <%= render "shared/error_messages", resource: @post %>
+    <%= f.text_area :text, class: "chat-text-area" %>
+    <%= f.submit "投稿する", class: "chat-submit" %>
+  <% end %>
+  <ol class="chat-list">
+    <li class="chat-list-item">
+      <span class="chat-header">チャット</span>
+    </li>
+    <% @posts.each.with_index(1).reverse_each do |post, index| %>
+      <li class="chat-list-item">
+        <h3><span><%= index %></span><%= post.user.name %></h3>
+        <p><%= post.text %></p>
+        <span class="chat-creation-date"><%= post.created_at %></span>
+      </li>
+    <% end %>
+  </ol>
+</div>
