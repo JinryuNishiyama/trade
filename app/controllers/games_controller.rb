@@ -20,6 +20,12 @@ class GamesController < ApplicationController
     end
   end
 
+  def show
+    @game = Game.find(params[:id])
+    @posts = Post.where(game_id: @game.id)
+    @post = Post.new
+  end
+
   def edit
     @game = Game.find(params[:id])
   end
