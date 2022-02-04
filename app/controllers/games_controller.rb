@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :exclude_not_logged_in_user, except: :index
+  before_action :authenticate_user!, except: :index
   before_action :ensure_correct_user, only: [:edit, :update]
 
   def index

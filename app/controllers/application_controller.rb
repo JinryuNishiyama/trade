@@ -14,10 +14,4 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, alert: "ゲストユーザーの情報は変更できません"
     end
   end
-
-  def exclude_not_logged_in_user
-    unless user_signed_in?
-      redirect_to new_user_session_path, alert: "ログインしてください"
-    end
-  end
 end
