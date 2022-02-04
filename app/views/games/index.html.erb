@@ -1,9 +1,9 @@
 <div class="game-list">
-  <p>ゲーム一覧</p>
+  <p>掲示板一覧</p>
   <ul>
     <% @games.each do |game| %>
       <li>
-        <%= link_to game.name, root_path, class: "game-link" %>
+        <%= link_to "#{game.name}#{game.purpose}掲示板", game_path(game), class: "game-link" %>
       </li>
     <% end %>
   </ul>
