@@ -104,10 +104,20 @@ RSpec.describe "Games", type: :system, js: true do
           expect(current_path).to eq new_user_session_path
         end
 
-        it "「新しいページを作成」をクリックすると、ログインページに遷移し、エラーメッセージが表示されること" do
+        it "「新しいページを作成」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
           click_on "新しいページを作成"
-          expect(page).to have_content "ログインしてください"
-          expect(current_path).to eq new_user_session_path
+          expect(page).to have_content "You need to sign in or sign up before continuing."
+          within ".account-section h1" do
+            expect(page).to have_content "ログイン"
+          end
+        end
+
+        it "「掲示板一覧」内のチャットページ名をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
+          click_on "#{game.name}#{game.purpose}掲示板"
+          expect(page).to have_content "You need to sign in or sign up before continuing."
+          within ".account-section h1" do
+            expect(page).to have_content "ログイン"
+          end
         end
       end
 
@@ -154,6 +164,11 @@ RSpec.describe "Games", type: :system, js: true do
         it "「新しいページを作成」をクリックすると、掲示板作成ページに遷移すること" do
           click_on "新しいページを作成"
           expect(current_path).to eq new_game_path
+        end
+
+        it "「掲示板一覧」内のチャットページ名をクリックすると、チャットページに遷移すること" do
+          click_on "#{game.name}#{game.purpose}掲示板"
+          expect(current_path).to eq game_path(game)
         end
       end
 
@@ -207,6 +222,61 @@ RSpec.describe "Games", type: :system, js: true do
         expect(page).to have_content "ページを作成できませんでした"
         within ".game-section h1" do
           expect(page).to have_content "新しいページを作成"
+        end
+      end
+    end
+  end
+
+  describe "チャットページ" do
+    let!(:post) { create(:post, game: game) }
+    let(:another_post) { build(:another_post, game: game) }
+
+    before do
+      sign_in_as(user)
+      visit game_path(game)
+    end
+
+    describe "表示テスト" do
+      it "ゲーム名とページの用途が表示されること" do
+        within ".chat-section h1" do
+          expect(page).to have_content game.name
+          expect(page).to have_content game.purpose
+        end
+      end
+
+      it "ページの説明が表示されること" do
+        within ".chat-section" do
+          expect(page).to have_content game.description
+        end
+      end
+
+      it "チャットを投稿したユーザーの名前が表示されること" do
+        within ".chat-list" do
+          expect(page).to have_content post.user.name
+        end
+      end
+
+      it "チャットの内容が表示されること" do
+        within ".chat-list" do
+          expect(page).to have_content post.text
+        end
+      end
+
+      it "チャットの作成日時が表示されること" do
+        within ".chat-list" do
+          expect(page).to have_content post.created_at.to_s
+        end
+      end
+
+      it "チャットを入力して「投稿する」をクリックすると、投稿したチャットが表示されること" do
+        fill_in "post[text]", with: another_post.text
+        within ".chat-form" do
+          click_on "投稿する"
+        end
+        within ".chat-list" do
+          expect(page).to have_content user.name
+          expect(page).to have_content another_post.text
+          expect(page).to have_content another_post.created_at.to_s
         end
       end
     end
