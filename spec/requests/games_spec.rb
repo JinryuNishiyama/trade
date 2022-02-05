@@ -15,8 +15,8 @@ RSpec.describe "Games", type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it "レスポンスにゲーム名が含まれること" do
-      expect(response.body).to include game.name
+    it "チャットページの名前が表示されること" do
+      expect(response.body).to include "#{game.name}#{game.purpose}掲示板"
     end
 
     context "ログインしていない場合" do
@@ -110,10 +110,41 @@ RSpec.describe "Games", type: :request do
     end
   end
 
+  describe "GET #show" do
+    let!(:post) { create(:post, game: game) }
+
+    before do
+      sign_in user
+      get game_path(game)
+    end
+
+    it "リクエストが成功すること" do
+      expect(response).to have_http_status(200)
+    end
+
+    it "掲示板の情報が表示されること" do
+      expect(response.body).to include game.name
+      expect(response.body).to include game.purpose
+      expect(response.body).to include game.description
+    end
+
+    it "チャットを投稿したユーザーの名前が表示されること" do
+      expect(response.body).to include post.user.name
+    end
+
+    it "チャットの内容が表示されること" do
+      expect(response.body).to include post.text
+    end
+
+    it "チャットの作成日時が表示されること" do
+      expect(response.body).to include post.created_at.to_s
+    end
+  end
+
   describe "GET #edit" do
     before do
       sign_in user
-      get edit_game_path(game.id)
+      get edit_game_path(game)
     end
 
     it "リクエストが成功すること" do
@@ -145,36 +176,36 @@ RSpec.describe "Games", type: :request do
 
     context "パラメータが有効である場合" do
       it "リクエストが成功すること" do
-        patch game_path(game.id), params: { game: game_params }
+        patch game_path(game), params: { game: game_params }
         expect(response).to have_http_status(302)
       end
 
       it "データが更新されること" do
         expect do
-          patch game_path(game.id), params: { game: game_params_after_change }
+          patch game_path(game), params: { game: game_params_after_change }
         end.to change { Game.find(game.id).name }.from("テストゲーム").to("変更後テストゲーム")
       end
 
       it "リダイレクトされること" do
-        patch game_path(game.id), params: { game: game_params }
+        patch game_path(game), params: { game: game_params }
         expect(response).to redirect_to root_path
       end
     end
 
     context "パラメータが無効である場合" do
       it "リクエストが成功すること" do
-        patch game_path(game.id), params: { game: invalid_game_params }
+        patch game_path(game), params: { game: invalid_game_params }
         expect(response).to have_http_status(200)
       end
 
       it "データが更新されないこと" do
         expect do
-          patch game_path(game.id), params: { game: invalid_game_params_after_change }
+          patch game_path(game), params: { game: invalid_game_params_after_change }
         end.not_to change { Game.find(game.id).name }
       end
 
       it "エラーが表示されること" do
-        patch game_path(game.id), params: { game: invalid_game_params }
+        patch game_path(game), params: { game: invalid_game_params }
         expect(response.body).to include "更新できませんでした"
       end
     end

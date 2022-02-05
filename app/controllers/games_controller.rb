@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :exclude_not_logged_in_user, except: :index
+  before_action :authenticate_user!, except: :index
   before_action :ensure_correct_user, only: [:edit, :update]
 
   def index
@@ -18,6 +18,12 @@ class GamesController < ApplicationController
       flash.now[:alert] = "ページを作成できませんでした"
       render "new"
     end
+  end
+
+  def show
+    @game = Game.find(params[:id])
+    @posts = Post.where(game_id: @game.id).includes(:user)
+    @post = Post.new
   end
 
   def edit

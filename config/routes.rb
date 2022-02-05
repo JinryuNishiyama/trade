@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   root 'games#index'
 
   get 'games/list'
-  resources :games
+  resources :games do
+    resources :posts, only: :create
+  end
 
   devise_for :users
   devise_scope :user do
