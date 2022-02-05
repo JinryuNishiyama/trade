@@ -22,7 +22,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    @posts = Post.where(game_id: @game.id)
+    @posts = Post.where(game_id: @game.id).includes(:user)
     @post = Post.new
   end
 
