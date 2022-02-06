@@ -5,9 +5,9 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
 
     if @post.save
-      redirect_to game_path(@game)
+      redirect_to game_path(@game), notice: "チャットを投稿しました"
     else
-      render "games/show"
+      redirect_to game_path(@game), alert: "投稿できませんでした"
     end
   end
 
