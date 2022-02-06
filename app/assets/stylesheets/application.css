@@ -67,6 +67,14 @@ body {
   margin: 0 auto;
 }
 
+@media screen and (max-width: 767px) {
+  .main-contents {
+    flex-direction: column;
+    width: calc(100% - 40px);
+    margin-right: 20px;
+  }
+}
+
 /* ===========================
   2. shared
 =========================== */
@@ -95,6 +103,12 @@ header {
   font-size: 32px;
   font-weight: bold;
   margin-left: 40px;
+}
+
+@media screen and (max-width: 575px) {
+  .website-name {
+    margin-left: 20px;
+  }
 }
 
 .website-name:hover {
@@ -137,8 +151,21 @@ footer {
   margin-right: 20px;
 }
 
+@media screen and (max-width: 575px) {
+  .header-link {
+    display: block;
+  }
+}
+
 .header-link:last-of-type {
   margin-right: 40px;
+}
+
+@media screen and (max-width: 575px) {
+  .header-link:last-of-type {
+    margin-top: 10px;
+    margin-right: 20px;
+  }
 }
 
 .header-link:hover {
@@ -158,6 +185,12 @@ footer {
   margin-right: 20px;
 }
 
+@media screen and (max-width: 575px) {
+  .header-logged-in {
+    border: none;
+  }
+}
+
 .user-icon {
   border-radius: 50%;
   width: 60px;
@@ -170,6 +203,12 @@ footer {
   margin: 0 20px;
 }
 
+@media screen and (max-width: 575px) {
+  .user-name {
+    display: none;
+  }
+}
+
 .header-box {
   position: absolute;
   top: 74px;
@@ -177,6 +216,12 @@ footer {
   display: none;
   background-color: #eedcb3;
   padding: 20px;
+}
+
+@media screen and (max-width: 575px) {
+  .header-box {
+    top: 84px;
+  }
 }
 
 .header-box-link {
