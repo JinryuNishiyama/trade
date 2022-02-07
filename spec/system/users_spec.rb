@@ -11,13 +11,7 @@ RSpec.describe "Users", type: :system, js: true do
     describe "ページ遷移テスト" do
       it "必要事項を入力して「登録」をクリックすると、アカウントが登録されてトップページに遷移すること" do
         minimum_password_length = 6
-        within ".registration-form" do
-          fill_in "名前", with: user.name
-          fill_in "メールアドレス", with: user.email
-          fill_in "パスワード（#{minimum_password_length}文字以上）", with: user.password
-          fill_in "パスワード（確認用）", with: user.password
-          click_on "登録"
-        end
+        sign_up_as(user, minimum_password_length)
         expect(current_path).to eq root_path
         expect(page).to have_content "Welcome! You have signed up successfully."
       end
@@ -33,6 +27,7 @@ RSpec.describe "Users", type: :system, js: true do
 
   describe "ログインページ" do
     let(:user) { create(:user) }
+    let(:invalid_user) { build(:user, :invalid) }
 
     before do
       visit new_user_session_path
@@ -45,18 +40,17 @@ RSpec.describe "Users", type: :system, js: true do
         expect(page).to have_content "Signed in successfully."
       end
 
+      it "誤ったメールアドレスまたはパスワードを入力して「ログイン」をクリックすると、ログインに失敗し、エラーメッセージが表示されること" do
+        sign_in_as(invalid_user)
+        expect(current_path).to eq new_user_session_path
+        expect(page).to have_content "Invalid Email or password."
+      end
+
       it "「新規登録」をクリックすると、アカウント登録ページに遷移すること" do
         within ".account-section" do
           click_on "新規登録"
         end
         expect(current_path).to eq new_user_registration_path
-      end
-
-      it "「パスワードをお忘れの場合」をクリックすると、パスワード再設定のためのメール送信ページに遷移すること" do
-        within ".account-section" do
-          click_on "パスワードをお忘れの場合"
-        end
-        expect(current_path).to eq new_user_password_path
       end
 
       it "「ゲストユーザーでログイン」をクリックすると、ログインしてトップページに遷移すること" do

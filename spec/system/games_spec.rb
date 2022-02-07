@@ -104,8 +104,8 @@ RSpec.describe "Games", type: :system, js: true do
           expect(current_path).to eq new_user_session_path
         end
 
-        it "「新しいページを作成」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
-          click_on "新しいページを作成"
+        it "「新しい掲示板を作成」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
+          click_on "新しい掲示板を作成"
           expect(page).to have_content "You need to sign in or sign up before continuing."
           within ".account-section h1" do
             expect(page).to have_content "ログイン"
@@ -161,8 +161,8 @@ RSpec.describe "Games", type: :system, js: true do
           expect(current_path).to eq root_path
         end
 
-        it "「新しいページを作成」をクリックすると、掲示板作成ページに遷移すること" do
-          click_on "新しいページを作成"
+        it "「新しい掲示板を作成」をクリックすると、掲示板作成ページに遷移すること" do
+          click_on "新しい掲示板を作成"
           expect(current_path).to eq new_game_path
         end
 
@@ -213,15 +213,15 @@ RSpec.describe "Games", type: :system, js: true do
 
       it "必要事項を入力して「作成」をクリックすると、登録に成功してトップページに遷移すること" do
         fill_out(game, "new")
-        expect(page).to have_content "新しいページを作成しました"
+        expect(page).to have_content "新しい掲示板を作成しました"
         expect(current_path).to eq root_path
       end
 
       it "入力漏れがある状態で「作成」をクリックすると、登録に失敗し、newテンプレートが表示されること" do
         fill_out(invalid_game, "new")
-        expect(page).to have_content "ページを作成できませんでした"
+        expect(page).to have_content "掲示板を作成できませんでした"
         within ".game-section h1" do
-          expect(page).to have_content "新しいページを作成"
+          expect(page).to have_content "新しい掲示板を作成"
         end
       end
     end
@@ -237,14 +237,14 @@ RSpec.describe "Games", type: :system, js: true do
     end
 
     describe "表示テスト" do
-      it "ゲーム名とページの用途が表示されること" do
+      it "ゲーム名と掲示板の用途が表示されること" do
         within ".chat-section h1" do
           expect(page).to have_content game.name
           expect(page).to have_content game.purpose
         end
       end
 
-      it "ページの説明が表示されること" do
+      it "掲示板の説明が表示されること" do
         within ".chat-section" do
           expect(page).to have_content game.description
         end

@@ -20,6 +20,8 @@ services:
       - selenium_chrome
     environment:
       SELENIUM_DRIVER_URL: http://selenium_chrome:4444/wd/hub
+    tty: true
+    stdin_open: true
   selenium_chrome:
     image: seleniarm/standalone-chromium
     ports:

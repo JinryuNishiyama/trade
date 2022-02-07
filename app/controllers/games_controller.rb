@@ -13,9 +13,9 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     if @game.save
-      redirect_to root_path, notice: "新しいページを作成しました"
+      redirect_to root_path, notice: "新しい掲示板を作成しました"
     else
-      flash.now[:alert] = "ページを作成できませんでした"
+      flash.now[:alert] = "掲示板を作成できませんでした"
       render "new"
     end
   end
