@@ -105,7 +105,7 @@ RSpec.describe "Games", type: :request do
 
       it "エラーが表示されること" do
         post games_path, params: { game: invalid_game_params }
-        expect(response.body).to include "ページを作成できませんでした"
+        expect(response.body).to include "掲示板を作成できませんでした"
       end
     end
   end
