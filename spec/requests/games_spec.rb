@@ -6,6 +6,7 @@ RSpec.describe "Games", type: :request do
 
   describe "GET #index" do
     let(:user_with_icon) { create(:user, :with_icon) }
+    let!(:games_with_post) { create_list(:game, 6, :with_post) }
 
     before do
       get root_path
@@ -15,8 +16,16 @@ RSpec.describe "Games", type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it "チャットページの名前が表示されること" do
-      expect(response.body).to include "#{game.name}#{game.purpose}掲示板"
+    it "掲示板のゲーム名が表示されること" do
+      expect(response.body).to include games_with_post.first.name
+    end
+
+    it "チャットが一件もない掲示板のゲーム名が表示されないこと" do
+      expect(response.body).not_to include game.name
+    end
+
+    it "6件目以降のゲーム名が表示されないこと" do
+      expect(response.body).not_to include games_with_post.last.name
     end
 
     context "ログインしていない場合" do
@@ -183,7 +192,7 @@ RSpec.describe "Games", type: :request do
       it "データが更新されること" do
         expect do
           patch game_path(game), params: { game: game_params_after_change }
-        end.to change { Game.find(game.id).name }.from("テストゲーム").to("変更後テストゲーム")
+        end.to change { Game.find(game.id).name }.from("テストゲーム").to("変更後ゲーム")
       end
 
       it "リダイレクトされること" do
@@ -217,7 +226,7 @@ RSpec.describe "Games", type: :request do
 
     before do
       sign_in user
-      get games_list_path
+      get list_games_path
     end
 
     it "リクエストが成功すること" do
@@ -234,6 +243,33 @@ RSpec.describe "Games", type: :request do
       expect(response.body).not_to include another_user.games.first.name
       expect(response.body).not_to include another_user.games.first.purpose
       expect(response.body).not_to include another_user.games.first.description
+    end
+  end
+
+  describe "GET #search" do
+    let!(:another_game) { create(:another_game) }
+
+    before do
+      sign_in user
+    end
+
+    it "リクエストが成功すること" do
+      get search_games_path
+      expect(response).to have_http_status(200)
+    end
+
+    it "検索ワードがゲーム名に含まれる掲示板の情報が表示されること" do
+      search_params = { q: { name_cont: "別の" } }
+      get search_games_path, params: search_params
+      expect(response.body).to include another_game.name
+      expect(response.body).to include another_game.purpose
+      expect(response.body).to include another_game.description
+    end
+
+    it "検索ワードがゲーム名に含まれない掲示板の情報が表示されないこと" do
+      search_params = { q: { name_cont: "別の" } }
+      get search_games_path, params: search_params
+      expect(response.body).not_to include game.name
     end
   end
 end
