@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   root 'games#index'
 
-  get 'games/list'
   resources :games do
+    collection do
+      get 'list'
+      get 'search'
+    end
     resources :posts, only: :create
   end
 
