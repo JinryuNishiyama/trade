@@ -1,12 +1,21 @@
 <div class="game-list">
-  <p>掲示板一覧</p>
-  <ul>
-    <% @games.each do |game| %>
-      <li>
-        <%= link_to "#{game.name}#{game.purpose}掲示板", game_path(game), class: "game-link" %>
-      </li>
+  <div class="game-name-search">
+    <p>ゲーム検索</p>
+    <%= search_form_for @q, url: search_games_path, class: "search-form" do |f| %>
+      <%= f.search_field :name_cont, placeholder: "ゲーム名で検索", class: "search-field" %>
+      <%= f.submit "検索", class: "search-submit" %>
     <% end %>
-  </ul>
+  </div>
+  <div class="game-list-item">
+    <p>人気のゲーム</p>
+    <ul>
+      <% @games.each do |game| %>
+        <li>
+          <%= link_to game.name, search_games_path(@q, "q[name_cont]": game.name), class: "game-link" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
   <%= link_to "新しい掲示板を作成", new_game_path, class: "new-game-link" %>
 </div>
 <div class="top-main">
@@ -24,11 +33,11 @@
     <ol>
       <li>
         <p>&#9312ゲームを選択</p>
-        <p>このページの左側の「ゲーム一覧」からゲームを選択します。</p>
+        <p>このページの左側の「ゲーム」からゲームを検索します。</p>
       </li>
       <li>
-        <p>&#9313何をするか選択</p>
-        <p>交換、対戦、仲間募集の中から選択します。</p>
+        <p>&#9313掲示板を選択</p>
+        <p>目的に合った掲示板を選択します。</p>
       </li>
       <li>
         <p>&#9314チャットでやりとり</p>
