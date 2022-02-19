@@ -1,9 +1,13 @@
 class GamesController < ApplicationController
+  MAX_GAMES_COUNT = 5
+
   before_action :authenticate_user!, except: :index
   before_action :ensure_correct_user, only: [:edit, :update]
 
   def index
-    @games = Game.all
+    @games = Game.joins(:posts).select(:name).group(:name).order("count(text) desc").
+      limit(MAX_GAMES_COUNT)
+    @q = Game.ransack(params[:q])
   end
 
   def new
@@ -42,6 +46,11 @@ class GamesController < ApplicationController
 
   def list
     @games = Game.where(user_id: current_user.id)
+  end
+
+  def search
+    @q = Game.ransack(params[:q])
+    @games = @q.result(distinct: true)
   end
 
   private
