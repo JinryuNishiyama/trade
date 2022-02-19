@@ -1,0 +1,14 @@
+<div class="game-search-section">
+  <h2 class="game-search-word">検索ワード：<%= params[:q][:name_cont] if params[:q] %></h2>
+  <h2 class="game-search-count">検索結果（<%= @games.count %>件）</h2>
+  <ul class="game-search-list">
+    <% @games.each do |game| %>
+      <%= link_to game_path(game), class: "game-search-link" do %>
+        <li class="game-search-item">
+          <p><span><%= game.name %></span><%= game.purpose %>掲示板</p>
+          <p><%= game.description %></p>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
