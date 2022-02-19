@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :post do
-    association :user
-    association :game
     text { "テスト用チャットです。" }
+    association :game
+    association :user
 
     trait :invalid do
       text { nil }
@@ -10,8 +10,8 @@ FactoryBot.define do
   end
 
   factory :another_post, class: "Post" do
-    association :user
+    text { "別のチャットです。" }
     association :game
-    text { "別のテスト用チャットです。" }
+    association :user
   end
 end
