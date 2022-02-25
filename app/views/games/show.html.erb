@@ -17,7 +17,7 @@
           <span><%= generate_link(post.text, @game)[0][:link] %></span>
           <%= safe_join(generate_link(post.text, @game)[0][:content].split("\n"), tag.br) %>
         </p>
-        <span class="chat-creation-date"><%= post.created_at %></span>
+        <span class="chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
         <span class="chat-reply-button">返信</span>
       </li>
     <% end %>
