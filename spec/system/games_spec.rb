@@ -260,7 +260,8 @@ RSpec.describe "Games", type: :system, js: true do
 
   describe "チャットページ" do
     let!(:post) { create(:post, game: game) }
-    let(:another_post) { build(:another_post, game: game) }
+    let!(:post_with_reply_to) { create(:post, :with_reply_to, game: game) }
+    let(:another_post) { build(:post, :another, game: game) }
 
     before do
       sign_in_as(user)
@@ -295,7 +296,7 @@ RSpec.describe "Games", type: :system, js: true do
 
       it "チャットの作成日時が表示されること" do
         within ".chat-list" do
-          expect(page).to have_content post.created_at.to_s
+          expect(page).to have_content post.created_at.to_s(:datetime)
         end
       end
 
@@ -307,8 +308,31 @@ RSpec.describe "Games", type: :system, js: true do
         within ".chat-list" do
           expect(page).to have_content user.name
           expect(page).to have_content another_post.text
-          expect(page).to have_content another_post.created_at.to_s
         end
+        expect(page).to have_content "チャットを投稿しました"
+      end
+
+      it "チャットを入力せずに「投稿する」をクリックすると、投稿に失敗し、エラーメッセージが表示されること" do
+        fill_in "post[text]", with: ""
+        within ".chat-form" do
+          click_on "投稿する"
+        end
+        within ".chat-list" do
+          expect(page).not_to have_content another_post.text
+        end
+        expect(page).to have_content "投稿できませんでした"
+      end
+
+      it "「返信」をクリックすると、テキストエリア内に「>> + 返信先のチャットの番号」が表示されること" do
+        find("#chat-list-item-1 .chat-reply-button").click
+        expect(page).to have_field "post[text]", with: ">>1\n"
+      end
+
+      it "「>> + 返信先のチャットの番号」をクリックすると、返信先のチャットまでページ内ジャンプすること" do
+        within "#chat-list-item-2" do
+          click_on ">>1"
+        end
+        expect(current_path).to eq game_path(game)
       end
     end
   end
