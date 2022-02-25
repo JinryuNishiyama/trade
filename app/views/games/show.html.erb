@@ -7,18 +7,18 @@
     <%= f.submit "投稿する", class: "chat-submit" %>
   <% end %>
   <ol class="chat-list">
-    <li class="chat-list-item">
+    <li id="chat-list-item-header">
       <span class="chat-header">チャット</span>
     </li>
     <% @posts.each.with_index(1).reverse_each do |post, index| %>
-      <li class="chat-list-item">
-        <% if post.user %>
-          <h3><span><%= index %></span><%= post.user.name %></h3>
-        <% else %>
-          <h3><span><%= index %></span>アカウント削除済みユーザー</h3>
-        <% end %>
-        <p><%= post.text %></p>
+      <li id="chat-list-item-<%= index %>">
+        <h3><span><%= index %></span><%= post.user ? post.user.name : "アカウント削除済みユーザー" %></h3>
+        <p>
+          <span><%= generate_link(post.text, @game)[0][:link] %></span>
+          <%= safe_join(generate_link(post.text, @game)[0][:content].split("\n"), tag.br) %>
+        </p>
         <span class="chat-creation-date"><%= post.created_at %></span>
+        <span class="chat-reply-button">返信</span>
       </li>
     <% end %>
   </ol>
