@@ -281,13 +281,14 @@
   }
 }
 
-.chat-list-item {
+.chat-list li {
+  position: relative;
   overflow-wrap: break-word;
-  border-bottom: 1px solid black;
+  border-top: 1px solid black;
   padding: 10px;
 }
 
-.chat-list-item:last-of-type {
+#chat-list-item-header {
   border: none;
 }
 
@@ -297,17 +298,44 @@
   font-weight: bold;
 }
 
-.chat-list-item h3 span {
+.chat-list li h3 span {
   margin-right: 1em;
 }
 
-.chat-list-item p {
+.chat-list li p {
   margin: 10px 0;
+}
+
+// games_helper.rb内に存在
+.chat-reply-link {
+  text-decoration: none;
+  color: blue;
+}
+
+// games_helper.rb内に存在
+.chat-reply-link:hover {
+  color: #ff4500;
 }
 
 .chat-creation-date {
   color: #808080;
   font-size: 12px;
+}
+
+.chat-reply-button {
+  cursor: pointer;
+  transition-duration: 0.2s;
+  position: absolute;
+  right: 10px;
+  border-radius: 5px;
+  border: 1px solid black;
+  font-size: 16px;
+  padding: 0 20px;
+}
+
+.chat-reply-button:hover {
+  transition-duration: 0.2s;
+  color: #ff4500;
 }
 
 /* ===========================
