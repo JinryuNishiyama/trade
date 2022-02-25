@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
   def create
     @game = Game.find(params[:game_id])
-    @posts = Post.where(game_id: @game.id)
     @post = Post.new(post_params)
 
     if @post.save

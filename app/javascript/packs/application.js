@@ -9,6 +9,7 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "jquery"
 import "./common"
+import "./reply_to_chat"
 
 Rails.start()
 Turbolinks.start()
