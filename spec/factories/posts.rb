@@ -7,11 +7,13 @@ FactoryBot.define do
     trait :invalid do
       text { nil }
     end
-  end
 
-  factory :another_post, class: "Post" do
-    text { "別のチャットです。" }
-    association :game
-    association :user
+    trait :another do
+      text { "別のチャットです。" }
+    end
+
+    trait :with_reply_to do
+      text { ">>1テスト用返信チャットです。" }
+    end
   end
 end
