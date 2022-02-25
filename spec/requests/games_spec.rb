@@ -146,7 +146,7 @@ RSpec.describe "Games", type: :request do
     end
 
     it "チャットの作成日時が表示されること" do
-      expect(response.body).to include post.created_at.to_s
+      expect(response.body).to include post.created_at.to_s(:datetime)
     end
   end
 
