@@ -9,7 +9,6 @@ AllCops:
     - 'config/spring.rb'
     - 'config.ru'
     - 'db/schema.rb'
-    - 'db/seeds.rb'
     - 'lib/**/*'
     - 'log/**/*'
     - 'node_modules/**/*'
