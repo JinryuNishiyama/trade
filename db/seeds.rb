@@ -20,20 +20,20 @@ users = User.create!(
     {
       name: "ユーザー1",
       email: "user1@example.com",
-      password: "sampleuser1",
+      password: SecureRandom.urlsafe_base64,
       icon: File.open("#{Rails.root}/app/assets/images/user1_icon.jpg"),
     },
     # users[2]
     {
       name: "ユーザー2",
       email: "user2@example.com",
-      password: "sampleuser2",
+      password: SecureRandom.urlsafe_base64,
     },
     # users[3]
     {
       name: "別のユーザー",
       email: "another@example.com",
-      password: "anotheruser",
+      password: SecureRandom.urlsafe_base64,
     },
   ]
 )
