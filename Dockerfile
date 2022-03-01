@@ -8,7 +8,7 @@ RUN apt-get update \
   && apt-get install -y yarn
 
 RUN apt-get update -qq \
-  && apt-get install -y build-essential libpq-dev nodejs yarn default-mysql-client
+  && apt-get install -y build-essential libpq-dev nodejs yarn default-mysql-client graphviz
 RUN mkdir /trade
 WORKDIR /trade
 COPY Gemfile /trade/Gemfile
