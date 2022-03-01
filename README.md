@@ -68,7 +68,7 @@ Herokuにデプロイ
 
 ## ER図
 
-<img src="docs/images/erd.png" alt="TradeのER図" width="75%">
+<img src="docs/images/erd.png" alt="TradeのER図" width="70%">
 
 ## ポートフォリオ制作について
 
