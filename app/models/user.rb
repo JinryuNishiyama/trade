@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :name, presence: true
+  validates :admin, inclusion: { in: [true, false] }
 
   mount_uploader :icon, ImageUploader
 
