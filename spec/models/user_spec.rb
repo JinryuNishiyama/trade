@@ -7,6 +7,11 @@ RSpec.describe User, type: :model do
       expect(user).to be_valid
     end
 
+    it "名前、メールアドレス、パスワードがあり、管理者権限がtrueであれば有効であること" do
+      admin_user = build(:user, :admin)
+      expect(admin_user).to be_valid
+    end
+
     it "名前がなければ無効であること" do
       user = build(:user, name: "")
       user.valid?
@@ -23,6 +28,12 @@ RSpec.describe User, type: :model do
       user = build(:user, password: "")
       user.valid?
       expect(user.errors[:password]).to include "can't be blank"
+    end
+
+    it "管理者権限がtrueでもfalseでもなければ無効であること" do
+      user = build(:user, admin: "")
+      user.valid?
+      expect(user.errors[:admin]).to include "is not included in the list"
     end
 
     it "パスワードが設定した文字数以下であれば無効であること" do
@@ -46,6 +57,7 @@ RSpec.describe User, type: :model do
       guest_user = User.guest
       expect(guest_user.email).to eq "guest@example.com"
       expect(guest_user.name).to eq "ゲストユーザー"
+      expect(guest_user.password).to eq "guestuser"
     end
   end
 end
