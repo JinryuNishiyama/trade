@@ -75,11 +75,29 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_content "ログアウト"
         end
 
+        it "メニューボックス内に「管理画面」が表示されないこと" do
+          find(".header-logged-in").click
+          expect(page).not_to have_content "管理画面"
+        end
+
         it "ヘッダー内に「ログイン」・「新規登録」が表示されないこと" do
           within "header" do
             expect(page).not_to have_content "ログイン"
             expect(page).not_to have_content "新規登録"
           end
+        end
+      end
+
+      context "管理者権限を持ったユーザーでログインしている場合" do
+        let(:admin_user) { create(:user, :admin) }
+
+        before do
+          sign_in_as(admin_user)
+        end
+
+        it "メニューボックス内に「管理画面」が表示されること" do
+          find(".header-logged-in").click
+          expect(page).to have_content "管理画面"
         end
       end
     end
@@ -200,6 +218,20 @@ RSpec.describe "Games", type: :system, js: true do
         it "「新しい掲示板を作成」をクリックすると、掲示板作成ページに遷移すること" do
           click_on "新しい掲示板を作成"
           expect(current_path).to eq new_game_path
+        end
+      end
+
+      context "管理者権限を持ったユーザーでログインしている場合" do
+        let(:admin_user) { create(:user, :admin) }
+
+        before do
+          sign_in_as(admin_user)
+        end
+
+        it "メニューボックス内の「管理画面」をクリックすると、管理画面に遷移すること" do
+          find(".header-logged-in").click
+          click_on "管理画面"
+          expect(current_path).to eq admin_root_path
         end
       end
 
