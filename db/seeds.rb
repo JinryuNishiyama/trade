@@ -29,7 +29,7 @@ users = User.create!(
       email: "user1@example.com",
       password: SecureRandom.urlsafe_base64,
       icon: File.open("#{Rails.root}/app/assets/images/user1_icon.jpg"),
-      introduction: "ユーザー1の紹介文です。"
+      introduction: "ユーザー1の紹介文です。",
     },
     # users[2]
     {
