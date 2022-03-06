@@ -102,6 +102,8 @@ RSpec.describe "Users", type: :system, js: true do
           edit(user, "add_icon")
           expect(current_path).to eq root_path
           expect(page).to have_content "Your account has been updated successfully."
+          expect(page).to have_selector "img[src$='test.jpg']"
+          expect(page).not_to have_selector "img[src*='default_icon']"
         end
 
         it "「アカウント削除」をクリックすると、確認ダイアログが表示されること" do
@@ -136,8 +138,59 @@ RSpec.describe "Users", type: :system, js: true do
           edit(user, "remove_icon")
           expect(current_path).to eq root_path
           expect(page).to have_content "Your account has been updated successfully."
-          expect(user.icon.url).to eq nil
+          expect(page).to have_selector "img[src*='default_icon']"
+          expect(page).not_to have_selector "img[src$='test.jpg']"
         end
+      end
+    end
+  end
+
+  describe "ユーザープロフィールページ" do
+    let(:user) { create(:user) }
+    let(:user_with_icon) { create(:user, :with_icon) }
+    let(:game) { create(:game) }
+    let!(:post) { create(:post, game: game, user: user) }
+
+    before do
+      sign_in_as(user)
+    end
+
+    describe "表示テスト" do
+      context "アイコン画像未登録の場合" do
+        it "ユーザーの名前・紹介文・デフォルトのアイコン画像が表示されること" do
+          visit user_path(user)
+          expect(page).to have_content user.name
+          expect(page).to have_content user.introduction
+          expect(page).to have_selector "img[src*='default_icon']"
+        end
+      end
+
+      context "アイコン画像登録済みの場合" do
+        it "ユーザーの名前・紹介文・アイコン画像が表示されること" do
+          visit user_path(user_with_icon)
+          expect(page).to have_content user_with_icon.name
+          expect(page).to have_content user_with_icon.introduction
+          expect(page).to have_selector "img[src$='test.jpg']"
+        end
+      end
+
+      it "ユーザーのチャットが投稿された掲示板の名前が表示されること" do
+        visit user_path(user)
+        expect(page).to have_content "#{post.game.name}#{post.game.purpose}掲示板"
+      end
+
+      it "ユーザーのチャットの本文と作成日時が表示されること" do
+        visit user_path(user)
+        expect(page).to have_content post.text
+        expect(page).to have_content post.created_at.to_s(:datetime)
+      end
+    end
+
+    describe "ページ遷移テスト" do
+      it "ユーザーのチャットが投稿された掲示板の名前をクリックすると、その掲示板のチャットページに遷移すること" do
+        visit user_path(user)
+        click_on "#{post.game.name}#{post.game.purpose}掲示板"
+        expect(current_path).to eq game_path(post.game)
       end
     end
   end

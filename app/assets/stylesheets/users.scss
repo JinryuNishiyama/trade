@@ -1,13 +1,14 @@
 /* ========== index ==========
 1. shared
   1.1 _links.html.erb
-2. the others
+2. registrations, sessions
   2.1 COMMON
   2.2 registrations
     2.2.1 new.html.erb
     2.2.2 edit.html.erb
   2.3 sessions
     2.3.1 new.html.erb
+3. show.html.erb
 =========================== */
 
 /* ===========================
@@ -28,7 +29,7 @@
 }
 
 /* ===========================
-  2. the others
+  2. registrations, sessions
 =========================== */
 /* ===========================
   2.1 COMMON
@@ -110,6 +111,12 @@
 /* ===========================
   2.2.2 edit.html.erb
 =========================== */
+.form-text-area {
+  font-size: 16px;
+  width: 302px;
+  height: 90px;
+}
+
 .form-checkbox {
   width: 16px;
   height: 16px;
@@ -163,4 +170,97 @@
   background-color: blue;
   color: white;
   padding: 10px;
+}
+
+/* ===========================
+  3. show.html.erb
+=========================== */
+.show-user-section {
+  background-color: white;
+  width: 100%;
+  padding: 40px;
+}
+
+@media screen and (max-width: 767px) {
+  .show-user-section {
+    width: calc(100% - 80px);
+  }
+}
+
+.show-user-profile {
+  display: flex;
+}
+
+@media screen and (max-width: 767px) {
+  .show-user-profile {
+    flex-direction: column;
+  }
+}
+
+.show-user-profile h3 {
+  margin: 20px 0;
+}
+
+.show-user-information, .show-user-chat {
+  width: 50%;
+  padding: 0 20px;
+}
+
+@media screen and (max-width: 767px) {
+  .show-user-information, .show-user-chat {
+    width: calc(100% - 40px);
+  }
+}
+
+.show-user-information table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.show-user-information th {
+  width: 20%;
+  padding: 10px;
+}
+
+.show-user-information td {
+  width: 80%;
+  padding: 10px;
+}
+
+.show-user-information td span {
+  font-size: 24px;
+}
+
+.show-user-icon {
+  width: 100px;
+  height: 100px;
+}
+
+.show-user-chat ul {
+  list-style-type: none;
+}
+
+.show-user-chat ul li {
+  border-top: 1px solid black;
+  padding: 10px;
+}
+
+.show-user-game-link {
+  text-decoration: none;
+  color: blue;
+}
+
+.show-user-game-link:hover {
+  text-decoration: underline;
+}
+
+.show-user-chat-text {
+  margin: 10px 0;
+}
+
+.show-user-chat-creation-date {
+  display: block;
+  text-align: right;
+  color: #808080;
+  font-size: 12px;
 }

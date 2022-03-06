@@ -12,7 +12,14 @@
     </li>
     <% @posts.each.with_index(1).reverse_each do |post, index| %>
       <li id="chat-list-item-<%= index %>">
-        <h3><span><%= index %></span><%= post.user ? post.user.name : "アカウント削除済みユーザー" %></h3>
+        <h3>
+          <span><%= index %></span>
+          <% if post.user %>
+            <%= link_to post.user.name, user_path(post.user), class: "chat-username-link" %>
+          <% else %>
+            アカウント削除済みユーザー
+          <% end %>
+        </h3>
         <p>
           <span><%= generate_link(post.text, @game)[0][:link] %></span>
           <%= safe_join(generate_link(post.text, @game)[0][:content].split("\n"), tag.br) %>

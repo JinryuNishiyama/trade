@@ -8,6 +8,7 @@ module EditUserModule
       else
         check "アイコン画像をデフォルトに戻す"
       end
+      fill_in "自己紹介", with: user.introduction
       fill_in "メールアドレス", with: user.email
       fill_in "新しいパスワード", with: ""
       fill_in "新しいパスワード（確認用）", with: ""

@@ -1,0 +1,42 @@
+<div class="show-user-section">
+  <h1>プロフィール</h1>
+  <div class="show-user-profile">
+    <div class="show-user-information">
+      <h3>ユーザー情報</h3>
+      <table>
+        <tr>
+          <th>アイコン</th>
+          <td>
+            <% if @user.icon? %>
+              <%= image_tag @user.icon.url, class: "show-user-icon" %>
+            <% else %>
+              <%= image_tag "default_icon.jpg", class: "show-user-icon" %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <th>名前</th>
+          <td><span><%= @user.name %></span></td>
+        </tr>
+        <tr>
+          <th>自己紹介</th>
+          <td><%= @user.introduction %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="show-user-chat">
+      <h3>投稿一覧</h3>
+      <ul>
+        <% @posts.each do |post| %>
+          <li>
+            <%= link_to game_path(post.game), class: "show-user-game-link" do %>
+              <%= post.game.name %><%= post.game.purpose %>掲示板
+            <% end %>
+            <p class="show-user-chat-text"><%= safe_join(post.text.split("\n"), tag.br) %></p>
+            <span class="show-user-chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

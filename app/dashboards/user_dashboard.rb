@@ -21,6 +21,7 @@ class UserDashboard < Administrate::BaseDashboard
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     admin: Field::Boolean,
+    introduction: Field::Text,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -51,6 +52,7 @@ class UserDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     admin
+    introduction
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -67,6 +69,7 @@ class UserDashboard < Administrate::BaseDashboard
     name
     icon
     admin
+    introduction
   ].freeze
 
   # COLLECTION_FILTERS
