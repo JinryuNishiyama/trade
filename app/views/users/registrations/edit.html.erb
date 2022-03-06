@@ -10,16 +10,16 @@
       <%= f.label :icon, "アイコン画像", class: "form-label" %><br>
       <%= f.file_field :icon, class: "form-field" %>
     </div>
-    <div class="form">
-      <%= f.label :introduction, "自己紹介", class: "form-label" %><br>
-      <%= f.text_area :introduction, class: "form-text-area" %>
-    </div>
     <% if current_user.icon? %>
       <div class="form">
         <%= f.check_box :remove_icon, class: "form-checkbox" %>
         <%= f.label :remove_icon, "アイコン画像をデフォルトに戻す" %>
       </div>
     <% end %>
+    <div class="form">
+      <%= f.label :introduction, "自己紹介", class: "form-label" %><br>
+      <%= f.text_area :introduction, class: "form-text-area" %>
+    </div>
     <div class="form">
       <%= f.label :email, "メールアドレス", class: "form-label" %><br>
       <%= f.email_field :email, autocomplete: "email", class: "form-field" %>
