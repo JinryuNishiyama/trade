@@ -359,6 +359,15 @@ RSpec.describe "Games", type: :system, js: true do
         find("#chat-list-item-1 .chat-reply-button").click
         expect(page).to have_field "post[text]", with: ">>1\n"
       end
+    end
+
+    describe "ページ遷移テスト" do
+      it "チャットを投稿したユーザーの名前をクリックすると、そのユーザーのユーザープロフィールページに遷移すること" do
+        within "#chat-list-item-1" do
+          click_on post.user.name
+        end
+        expect(current_path).to eq user_path(post.user)
+      end
 
       it "「>> + 返信先のチャットの番号」をクリックすると、返信先のチャットまでページ内ジャンプすること" do
         within "#chat-list-item-2" do
