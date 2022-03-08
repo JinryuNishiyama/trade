@@ -10,6 +10,7 @@ class UserDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     games: Field::HasMany,
     posts: Field::HasMany,
+    likes: Field::HasMany,
     id: Field::Number,
     email: Field::String,
     encrypted_password: Field::String,
@@ -32,8 +33,8 @@ class UserDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     games
     posts
+    likes
     id
-    email
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -41,6 +42,7 @@ class UserDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = %i[
     games
     posts
+    likes
     id
     email
     encrypted_password
@@ -61,6 +63,7 @@ class UserDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     games
     posts
+    likes
     email
     encrypted_password
     reset_password_token
