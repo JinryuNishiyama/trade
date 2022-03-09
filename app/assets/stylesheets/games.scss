@@ -331,6 +331,18 @@
 .chat-creation-date {
   color: #808080;
   font-size: 12px;
+  margin-right: 10px;
+}
+
+.chat-keep-button {
+  cursor: pointer;
+  text-decoration: none;
+  color: red;
+  font-size: 20px;
+}
+
+.chat-keep-button:hover {
+  text-decoration: underline;
 }
 
 .chat-reply-button {
