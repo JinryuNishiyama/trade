@@ -1,6 +1,7 @@
 class Post < ApplicationRecord
   belongs_to :user
   belongs_to :game
+  has_many :likes, dependent: :destroy
 
   with_options presence: true do
     validates :text
