@@ -34,7 +34,7 @@ RSpec.describe "Posts", type: :request do
     context "パラメータが無効である場合" do
       it "リクエストが成功すること" do
         post game_posts_path(game), params: { post: invalid_post_params }
-        expect(response).to have_http_status(302)
+        expect(response).to have_http_status(200)
       end
 
       it "データベースに保存されないこと" do
@@ -43,9 +43,9 @@ RSpec.describe "Posts", type: :request do
         end.not_to change { Post.count }
       end
 
-      it "リダイレクトされること" do
+      it "エラーメッセージが表示されること" do
         post game_posts_path(game), params: { post: invalid_post_params }
-        expect(response).to redirect_to game_path(game)
+        expect(response.body).to include "投稿できませんでした"
       end
     end
   end
