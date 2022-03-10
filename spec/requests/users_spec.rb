@@ -26,25 +26,43 @@ RSpec.describe "Users" do
 
   describe "GET #show" do
     let(:user) { create(:user) }
+    let(:another_user) { create(:user) }
     let(:user_with_icon) { create(:user, :with_icon) }
-    let(:game) { create(:game) }
-    let!(:post) { create(:post, game: game, user: user) }
+    let(:another_game) { create(:another_game) }
+    let!(:user_post) { create(:post, user: user) }
+    let!(:liked_post) { create(:post, :another, game: another_game, user: another_user) }
+    let!(:like) { create(:like, post: liked_post, user: user) }
 
     before do
       sign_in user
     end
 
-    it "リクエストが成功すること" do
-      get user_path(user)
-      expect(response).to have_http_status(200)
-    end
-
     context "アイコン画像未登録の場合" do
-      it "ユーザーの名前・紹介文・デフォルトのアイコン画像が表示されること" do
+      before do
         get user_path(user)
+      end
+
+      it "リクエストが成功すること" do
+        expect(response).to have_http_status(200)
+      end
+
+      it "ユーザーの名前・紹介文・デフォルトのアイコン画像が表示されること" do
         expect(response.body).to include user.name
         expect(response.body).to include user.introduction
         expect(response.body).to include "default_icon"
+      end
+
+      it "投稿したチャット一覧がレスポンスに含まれること" do
+        expect(response.body).to include "#{user_post.game.name}#{user_post.game.purpose}掲示板"
+        expect(response.body).to include user_post.text
+        expect(response.body).to include user_post.created_at.to_s(:datetime)
+      end
+
+      it "いいねしたチャット一覧がレスポンスに含まれること" do
+        expect(response.body).to include liked_post.user.name
+        expect(response.body).to include "#{liked_post.game.name}#{liked_post.game.purpose}掲示板"
+        expect(response.body).to include liked_post.text
+        expect(response.body).to include liked_post.created_at.to_s(:datetime)
       end
     end
 
@@ -55,17 +73,6 @@ RSpec.describe "Users" do
         expect(response.body).to include user_with_icon.introduction
         expect(response.body).to include "test.jpg"
       end
-    end
-
-    it "ユーザーのチャットが投稿された掲示板の名前が表示されること" do
-      get user_path(user)
-      expect(response.body).to include "#{post.game.name}#{post.game.purpose}掲示板"
-    end
-
-    it "ユーザーのチャットの本文と作成日時が表示されること" do
-      get user_path(user)
-      expect(response.body).to include post.text
-      expect(response.body).to include post.created_at.to_s(:datetime)
     end
   end
 end
