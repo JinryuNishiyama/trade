@@ -4,7 +4,8 @@
     <%= render "shared/error_messages", resource: resource %>
     <div class="form">
       <%= f.label :name, "名前", class: "form-label" %><br>
-      <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "form-field" %>
+      <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "form-field" %><br>
+      <em>16文字以内</em>
     </div>
     <div class="form">
       <%= f.label :icon, "アイコン画像", class: "form-label" %><br>
