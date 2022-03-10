@@ -23,20 +23,14 @@
           <td><%= @user.introduction %></td>
         </tr>
       </table>
+      <div class="show-user-chat-buttons">
+        <p class="show-user-posted-chat-button">投稿したチャット一覧を表示</p>
+        <p class="show-user-liked-chat-button">いいねしたチャット一覧を表示</p>
+      </div>
     </div>
     <div class="show-user-chat">
-      <h3>投稿一覧</h3>
-      <ul>
-        <% @posts.each do |post| %>
-          <li>
-            <%= link_to game_path(post.game), class: "show-user-game-link" do %>
-              <%= post.game.name %><%= post.game.purpose %>掲示板
-            <% end %>
-            <p class="show-user-chat-text"><%= safe_join(post.text.split("\n"), tag.br) %></p>
-            <span class="show-user-chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
-          </li>
-        <% end %>
-      </ul>
+      <%= render "users/shared/posted_chats", posts: @user_posts %>
+      <%= render "users/shared/liked_chats", user: @user, posts: @all_posts %>
     </div>
   </div>
 </div>

@@ -1,0 +1,17 @@
+<div class="show-user-liked-chat">
+  <h3>いいねしたチャット一覧</h3>
+  <ul>
+    <% posts.each do |post| %>
+      <% if user.already_liked?(post) %>
+        <li>
+          <%= link_to post.user.name, user_path(post.user), class: "show-user-link" %><br>
+          <%= link_to game_path(post.game), class: "show-user-link" do %>
+            <%= post.game.name %><%= post.game.purpose %>掲示板
+          <% end %>
+          <p class="show-user-chat-text"><%= safe_join(post.text.split("\n"), tag.br) %></p>
+          <span class="show-user-chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
