@@ -37,7 +37,6 @@ RSpec.describe User, type: :model do
     end
 
     it "名前が16文字より多ければ無効であること" do
-      minimum_password_length = 6
       user = build(:user, name: "too-long-testname")
       user.valid?
       expect(user.errors[:name]).to include "is too long (maximum is 16 characters)"
