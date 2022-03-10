@@ -58,12 +58,33 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "self.guestメソッド" do
-    it "ゲストユーザーを作成できること" do
-      guest_user = User.guest
-      expect(guest_user.email).to eq "guest@example.com"
-      expect(guest_user.name).to eq "ゲストユーザー"
-      expect(guest_user.password).to eq "guestuser"
+  describe "メソッド" do
+    describe "self.guest" do
+      it "ゲストユーザーを作成できること" do
+        guest_user = User.guest
+        expect(guest_user.email).to eq "guest@example.com"
+        expect(guest_user.name).to eq "ゲストユーザー"
+        expect(guest_user.password).to eq "guestuser"
+      end
+    end
+
+    describe "already_liked?(post)" do
+      subject { user.already_liked?(post) }
+
+      let(:user) { create(:user) }
+
+      context "ユーザーがチャットにいいねしている場合" do
+        let(:post) { create(:post) }
+        let!(:like) { create(:like, post: post, user: user) }
+
+        it { is_expected.to eq true }
+      end
+
+      context "ユーザーがチャットにいいねしていない場合" do
+        let(:post) { create(:post) }
+
+        it { is_expected.to eq false }
+      end
     end
   end
 end
