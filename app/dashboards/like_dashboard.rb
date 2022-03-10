@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class PostDashboard < Administrate::BaseDashboard
+class LikeDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -9,10 +9,8 @@ class PostDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     user: Field::BelongsTo,
-    game: Field::BelongsTo,
-    likes: Field::HasMany,
+    post: Field::BelongsTo,
     id: Field::Number,
-    text: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
   }.freeze
@@ -24,19 +22,17 @@ class PostDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     user
-    game
-    likes
+    post
     id
+    created_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
     user
-    game
-    likes
+    post
     id
-    text
     created_at
     updated_at
   ].freeze
@@ -46,9 +42,7 @@ class PostDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
     user
-    game
-    likes
-    text
+    post
   ].freeze
 
   # COLLECTION_FILTERS
@@ -63,10 +57,10 @@ class PostDashboard < Administrate::BaseDashboard
   #   }.freeze
   COLLECTION_FILTERS = {}.freeze
 
-  # Overwrite this method to customize how posts are displayed
+  # Overwrite this method to customize how likes are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(post)
-  #   "Post ##{post.id}"
+  # def display_resource(like)
+  #   "Like ##{like.id}"
   # end
 end

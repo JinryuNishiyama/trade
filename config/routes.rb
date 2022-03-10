@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'users/show'
   root 'games#index'
 
   resources :games do
@@ -7,7 +6,9 @@ Rails.application.routes.draw do
       get 'list'
       get 'search'
     end
-    resources :posts, only: :create
+    resources :posts, only: :create do
+      resource :likes, only: [:create, :destroy]
+    end
   end
 
   devise_for :users, skip: [:passwords]
@@ -20,6 +21,7 @@ Rails.application.routes.draw do
     resources :users
     resources :games
     resources :posts
+    resources :likes
 
     root 'users#index'
   end

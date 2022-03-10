@@ -69,7 +69,6 @@ RSpec.describe "Games", type: :system, js: true do
 
         it "ヘッダー内のユーザー名またはアイコン画像をクリックすると、メニューボックスが表示されること" do
           find(".header-logged-in").click
-          expect(page).to have_css ".header-box"
           expect(page).to have_content "ユーザー情報の編集"
           expect(page).to have_content "作成した掲示板一覧"
           expect(page).to have_content "ログアウト"
@@ -294,6 +293,7 @@ RSpec.describe "Games", type: :system, js: true do
     let!(:post) { create(:post, game: game) }
     let!(:post_with_reply_to) { create(:post, :with_reply_to, game: game) }
     let(:another_post) { build(:post, :another, game: game) }
+    let!(:like) { create(:like, post: post, user: user) }
 
     before do
       sign_in_as(user)
@@ -353,6 +353,26 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).not_to have_content another_post.text
         end
         expect(page).to have_content "投稿できませんでした"
+      end
+
+      it "「☆」をクリックすると、「★」に変わること" do
+        within "#chat-list-item-2 #chat-keep-button-#{post_with_reply_to.id}" do
+          find(".like-not-created").click
+        end
+        within ".like-created" do
+          expect(page).to have_content "★"
+          expect(page).not_to have_content "☆"
+        end
+      end
+
+      it "「★」をクリックすると、「☆」に変わること" do
+        within "#chat-list-item-1 #chat-keep-button-#{post.id}" do
+          find(".like-created").click
+        end
+        within ".like-not-created" do
+          expect(page).to have_content "☆"
+          expect(page).not_to have_content "★"
+        end
       end
 
       it "「返信」をクリックすると、テキストエリア内に「>> + 返信先のチャットの番号」が表示されること" do

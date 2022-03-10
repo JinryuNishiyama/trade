@@ -25,6 +25,9 @@
           <%= safe_join(generate_link(post.text, @game)[0][:content].split("\n"), tag.br) %>
         </p>
         <span class="chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
+        <span id="chat-keep-button-<%= post.id %>">
+          <%= render "likes/shared/like", game: @game, post: post %>
+        </span>
         <span class="chat-reply-button">返信</span>
       </li>
     <% end %>

@@ -1,0 +1,5 @@
+<% if current_user.already_liked?(post) %>
+  <%= link_to "★", game_post_likes_path(game, post), method: :delete, remote: true, class: "chat-keep-button like-created" %>
+<% else %>
+  <%= link_to "☆", game_post_likes_path(game, post), method: :post, remote: true, class: "chat-keep-button like-not-created" %>
+<% end %>

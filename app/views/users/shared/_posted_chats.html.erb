@@ -1,0 +1,14 @@
+<div class="show-user-posted-chat">
+  <h3>投稿したチャット一覧</h3>
+  <ul>
+    <% posts.each do |post| %>
+      <li>
+        <%= link_to game_path(post.game), class: "show-user-link" do %>
+          <%= post.game.name %><%= post.game.purpose %>掲示板
+        <% end %>
+        <p class="show-user-chat-text"><%= safe_join(post.text.split("\n"), tag.br) %></p>
+        <span class="show-user-chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
+      </li>
+    <% end %>
+  </ul>
+</div>

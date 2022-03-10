@@ -10,6 +10,7 @@ import "channels"
 import "jquery"
 import "./common"
 import "./reply_to_chat"
+import "./switch_chats_displayed"
 
 Rails.start()
 Turbolinks.start()

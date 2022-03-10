@@ -147,9 +147,11 @@ RSpec.describe "Users", type: :system, js: true do
 
   describe "ユーザープロフィールページ" do
     let(:user) { create(:user) }
+    let(:another_user) { create(:user) }
     let(:user_with_icon) { create(:user, :with_icon) }
-    let(:game) { create(:game) }
-    let!(:post) { create(:post, game: game, user: user) }
+    let!(:user_post) { create(:post, user: user) }
+    let!(:liked_post) { create(:post, user: another_user) }
+    let!(:like) { create(:like, post: liked_post, user: user) }
 
     before do
       sign_in_as(user)
@@ -157,11 +159,40 @@ RSpec.describe "Users", type: :system, js: true do
 
     describe "表示テスト" do
       context "アイコン画像未登録の場合" do
+        before do
+          visit user_path(user)
+        end
+
         it "ユーザーの名前・紹介文・デフォルトのアイコン画像が表示されること" do
           visit user_path(user)
           expect(page).to have_content user.name
           expect(page).to have_content user.introduction
           expect(page).to have_selector "img[src*='default_icon']"
+        end
+
+        it "「投稿したチャット一覧を表示」をクリックすると、投稿したチャット一覧が表示されること" do
+          find(".show-user-posted-chat-button").click
+          expect(page).to have_content "#{user_post.game.name}#{user_post.game.purpose}掲示板"
+          expect(page).to have_content user_post.text
+          expect(page).to have_content user_post.created_at.to_s(:datetime)
+        end
+
+        it "「投稿したチャット一覧を表示」をクリックすると、いいねしたチャット一覧が表示されないこと" do
+          find(".show-user-posted-chat-button").click
+          expect(find(".show-user-liked-chat", visible: false)).not_to be_visible
+        end
+
+        it "「いいねしたチャット一覧を表示」をクリックすると、いいねしたチャット一覧が表示されること" do
+          find(".show-user-liked-chat-button").click
+          expect(page).to have_content liked_post.user.name
+          expect(page).to have_content "#{liked_post.game.name}#{liked_post.game.purpose}掲示板"
+          expect(page).to have_content liked_post.text
+          expect(page).to have_content liked_post.created_at.to_s(:datetime)
+        end
+
+        it "「いいねしたチャット一覧を表示」をクリックすると、投稿したチャット一覧が表示されないこと" do
+          find(".show-user-liked-chat-button").click
+          expect(find(".show-user-posted-chat", visible: false)).not_to be_visible
         end
       end
 
@@ -173,24 +204,28 @@ RSpec.describe "Users", type: :system, js: true do
           expect(page).to have_selector "img[src$='test.jpg']"
         end
       end
-
-      it "ユーザーのチャットが投稿された掲示板の名前が表示されること" do
-        visit user_path(user)
-        expect(page).to have_content "#{post.game.name}#{post.game.purpose}掲示板"
-      end
-
-      it "ユーザーのチャットの本文と作成日時が表示されること" do
-        visit user_path(user)
-        expect(page).to have_content post.text
-        expect(page).to have_content post.created_at.to_s(:datetime)
-      end
     end
 
     describe "ページ遷移テスト" do
-      it "ユーザーのチャットが投稿された掲示板の名前をクリックすると、その掲示板のチャットページに遷移すること" do
+      before do
         visit user_path(user)
-        click_on "#{post.game.name}#{post.game.purpose}掲示板"
-        expect(current_path).to eq game_path(post.game)
+      end
+
+      it "ユーザーのチャットが投稿された掲示板の名前をクリックすると、その掲示板のチャットページに遷移すること" do
+        click_on "#{user_post.game.name}#{user_post.game.purpose}掲示板"
+        expect(current_path).to eq game_path(user_post.game)
+      end
+
+      it "いいねしたチャットを投稿したユーザーの名前をクリックすると、そのユーザーのプロフィールページに遷移すること" do
+        find(".show-user-liked-chat-button").click
+        click_on liked_post.user.name
+        expect(current_path).to eq user_path(liked_post.user)
+      end
+
+      it "いいねしたチャットが投稿された掲示板の名前をクリックすると、その掲示板のチャットページに遷移すること" do
+        find(".show-user-liked-chat-button").click
+        click_on "#{liked_post.game.name}#{liked_post.game.purpose}掲示板"
+        expect(current_path).to eq game_path(liked_post.game)
       end
     end
   end
