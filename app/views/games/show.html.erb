@@ -3,6 +3,7 @@
   <p><%= @game.description %></p>
   <%= form_with model: [@game, @post], class: "chat-form" do |f| %>
     <h3>投稿する</h3>
+    <%= render "shared/error_messages", resource: @post %>
     <%= f.text_area :text, class: "chat-text-area" %>
     <%= f.submit "投稿する", class: "chat-submit" %>
   <% end %>
