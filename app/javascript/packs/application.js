@@ -8,7 +8,7 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "jquery"
-import "./common"
+import "./header_menu"
 import "./reply_to_chat"
 import "./switch_chats_displayed"
 
