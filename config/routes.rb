@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'games#index'
 
-  resources :games do
+  resources :games, except: :destroy do
     collection do
       get 'list'
       get 'search'
@@ -10,9 +10,11 @@ Rails.application.routes.draw do
       resource :likes, only: [:create, :destroy]
     end
   end
+  get 'games/:id/posts', to: 'games#show'
 
   devise_for :users, skip: [:passwords]
   devise_scope :user do
+    get 'users', to: 'devise/registrations#new'
     post 'users/guest_sign_in', to: 'users/sessions#guest_sign_in'
   end
   resources :users, only: :show

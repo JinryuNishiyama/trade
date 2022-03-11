@@ -70,6 +70,7 @@ RSpec.describe "Games", type: :system, js: true do
         it "ヘッダー内のユーザー名またはアイコン画像をクリックすると、メニューボックスが表示されること" do
           find(".header-logged-in").click
           expect(page).to have_content "ユーザー情報の編集"
+          expect(page).to have_content "プロフィール"
           expect(page).to have_content "作成した掲示板一覧"
           expect(page).to have_content "ログアウト"
         end
@@ -169,6 +170,12 @@ RSpec.describe "Games", type: :system, js: true do
           find(".header-logged-in").click
           click_on "ユーザー情報の編集"
           expect(current_path).to eq edit_user_registration_path
+        end
+
+        it "メニューボックス内の「プロフィール」をクリックすると、ユーザープロフィールページに遷移すること" do
+          find(".header-logged-in").click
+          click_on "プロフィール"
+          expect(current_path).to eq user_path(user)
         end
 
         it "メニューボックス内の「作成した掲示板一覧」をクリックすると、掲示板一覧ページに遷移すること" do

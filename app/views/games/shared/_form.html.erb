@@ -1,4 +1,5 @@
-<%= form_with model: model, class: "game-form" do |f| %>
+<%= form_with model: game, class: "game-form" do |f| %>
+  <%= render "shared/error_messages", resource: game %>
   <table>
     <tr>
       <th><%= f.label :name, "ゲーム名", class: "game-label" %></th>
@@ -13,5 +14,5 @@
       <td><%= f.text_area :description, class: "game-text-area" %></td>
     </tr>
   </table>
-  <%= f.submit model.new_record? ? "作成" : "更新", class: "game-button" %>
+  <%= f.submit game.new_record? ? "作成" : "更新", class: "game-button" %>
 <% end %>

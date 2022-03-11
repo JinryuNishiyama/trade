@@ -1,12 +1,14 @@
 class PostsController < ApplicationController
   def create
     @game = Game.find(params[:game_id])
+    @posts = @game.posts.includes(:user)
     @post = Post.new(post_params)
 
     if @post.save
       redirect_to game_path(@game), notice: "チャットを投稿しました"
     else
-      redirect_to game_path(@game), alert: "投稿できませんでした"
+      flash.now[:alert] = "投稿できませんでした"
+      render "games/show"
     end
   end
 

@@ -70,6 +70,8 @@ Herokuにデプロイ
 
 <img src="docs/images/erd.png" alt="TradeのER図" width="70%">
 
+Likeモデルでは、どのユーザー（User）がどのチャット（Post）にいいねしたかを管理しています。
+
 ## ポートフォリオ制作について
 
 ### 特に力を入れた点

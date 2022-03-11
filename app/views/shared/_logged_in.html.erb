@@ -11,6 +11,7 @@
     <%= link_to "管理画面", admin_root_path, class: "header-box-link" %>
   <% end %>
   <%= link_to "ユーザー情報の編集", edit_user_registration_path, class: "header-box-link" %>
+  <%= link_to "プロフィール", user_path(current_user), class: "header-box-link" %>
   <%= link_to "作成した掲示板一覧", list_games_path, class: "header-box-link" %>
   <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "header-box-link" %>
 </div>
