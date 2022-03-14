@@ -11,26 +11,6 @@
     <li id="chat-list-item-header">
       <span class="chat-header">チャット</span>
     </li>
-    <% @posts.each.with_index(1).reverse_each do |post, index| %>
-      <li id="chat-list-item-<%= index %>">
-        <h3>
-          <span><%= index %></span>
-          <% if post.user %>
-            <%= link_to post.user.name, user_path(post.user), class: "chat-username-link" %>
-          <% else %>
-            アカウント削除済みユーザー
-          <% end %>
-        </h3>
-        <p>
-          <span><%= generate_link(post.text, @game)[0][:link] %></span>
-          <%= safe_join(generate_link(post.text, @game)[0][:content].split("\n"), tag.br) %>
-        </p>
-        <span class="chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
-        <span id="chat-keep-button-<%= post.id %>">
-          <%= render "games/shared/like", game: @game, post: post %>
-        </span>
-        <span class="chat-reply-button">返信</span>
-      </li>
-    <% end %>
+    <%= render partial: "games/shared/chat", collection: @posts, as: :post, locals: { game: @game } %>
   </ol>
 </div>
