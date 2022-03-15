@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe "Posts", type: :request do
   let(:user) { create(:user) }
   let(:game) { create(:game) }
-  let(:new_post) { create(:post, game: game, user: user) }
 
   describe "POST #create" do
     let(:post_params) { attributes_for(:post) }
@@ -47,6 +46,30 @@ RSpec.describe "Posts", type: :request do
         post game_posts_path(game), params: { post: invalid_post_params }
         expect(response.body).to include "投稿できませんでした"
       end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let!(:post) { create(:post) }
+
+    before do
+      sign_in user
+    end
+
+    it "リクエストが成功すること" do
+      delete game_post_path(game, post)
+      expect(response).to have_http_status(302)
+    end
+
+    it "チャットが削除されること" do
+      expect do
+        delete game_post_path(game, post)
+      end.to change { Post.count }.by(-1)
+    end
+
+    it "リダイレクトされること" do
+      delete game_post_path(game, post)
+      expect(response).to redirect_to game_path(game)
     end
   end
 end
