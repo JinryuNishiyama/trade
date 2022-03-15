@@ -1,0 +1,26 @@
+<li id="chat-list-item-<%= post.chat_num %>">
+  <h3>
+    <span><%= post.chat_num %></span>
+    <% if post.user %>
+      <%= link_to post.user.name, user_path(post.user), class: "chat-username-link" %>
+    <% else %>
+      アカウント削除済みユーザー
+    <% end %>
+  </h3>
+  <p>
+    <span><%= generate_link(post.text, game)[0][:link] %></span>
+    <%= safe_join(generate_link(post.text, game)[0][:content].split("\n"), tag.br) %>
+  </p>
+  <div>
+    <span class="chat-creation-date"><%= post.created_at.to_s(:datetime) %></span>
+    <div class="chat-links">
+      <% if post.user == current_user %>
+        <%= link_to "削除", game_post_path(game, post), method: :delete, data: { confirm: "チャットを削除します、よろしいですか？" }, class: "chat-delete-link" %>
+      <% end %>
+      <span id="chat-keep-button-<%= post.chat_num %>">
+        <%= render "games/shared/like", game: game, post: post %>
+      </span>
+      <span class="chat-reply-button">返信</span>
+    </div>
+  </div>
+</li>

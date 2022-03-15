@@ -5,6 +5,7 @@ class Post < ApplicationRecord
 
   with_options presence: true do
     validates :text
+    validates :chat_num
     validates :user_id
     validates :game_id
   end

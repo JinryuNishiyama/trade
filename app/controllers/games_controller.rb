@@ -26,7 +26,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    @posts = @game.posts.includes(:user)
+    @posts = @game.posts.includes(:user).order("created_at desc")
     @post = Post.new
   end
 

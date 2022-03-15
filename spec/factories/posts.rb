@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :post do
     text { "テスト用チャットです。" }
+    chat_num { 1 }
     association :game
     association :user
 

@@ -281,24 +281,28 @@ RSpec.describe "Games", type: :system, js: true do
       end
 
       it "必要事項を入力して「作成」をクリックすると、登録に成功してトップページに遷移すること" do
-        fill_out(game, "new")
-        expect(page).to have_content "新しい掲示板を作成しました"
-        expect(current_path).to eq root_path
+        expect do
+          fill_out(game, "new")
+          expect(page).to have_content "新しい掲示板を作成しました"
+          expect(current_path).to eq root_path
+        end.to change { Game.count }.by(1)
       end
 
       it "入力漏れがある状態で「作成」をクリックすると、登録に失敗し、newテンプレートが表示されること" do
-        fill_out(invalid_game, "new")
-        expect(page).to have_content "掲示板を作成できませんでした"
-        within ".game-section h1" do
-          expect(page).to have_content "新しい掲示板を作成"
-        end
+        expect do
+          fill_out(invalid_game, "new")
+          expect(page).to have_content "掲示板を作成できませんでした"
+          within ".game-section h1" do
+            expect(page).to have_content "新しい掲示板を作成"
+          end
+        end.not_to change { Game.count }
       end
     end
   end
 
   describe "チャットページ" do
-    let!(:post) { create(:post, game: game) }
-    let!(:post_with_reply_to) { create(:post, :with_reply_to, game: game) }
+    let!(:post) { create(:post, game: game, user: user) }
+    let!(:post_with_reply_to) { create(:post, :with_reply_to, chat_num: 2, game: game) }
     let(:another_post) { build(:post, :another, game: game) }
     let!(:like) { create(:like, post: post, user: user) }
 
@@ -339,47 +343,88 @@ RSpec.describe "Games", type: :system, js: true do
         end
       end
 
-      it "チャットを入力して「投稿する」をクリックすると、投稿したチャットが表示されること" do
-        fill_in "post[text]", with: another_post.text
-        within ".chat-form" do
-          click_on "投稿する"
-        end
-        within ".chat-list" do
-          expect(page).to have_content user.name
+      it "チャットを入力して「投稿する」をクリックすると、チャットが保存され、投稿したチャットが表示されること" do
+        expect do
+          fill_in "post[text]", with: another_post.text
+          within ".chat-form" do
+            click_on "投稿する"
+          end
+          within "#chat-list-item-3 h3" do
+            expect(page).to have_content "3"
+            expect(page).to have_content user.name
+          end
           expect(page).to have_content another_post.text
-        end
-        expect(page).to have_content "チャットを投稿しました"
+          expect(page).to have_content "チャットを投稿しました"
+        end.to change { Post.count }.by(1)
       end
 
       it "チャットを入力せずに「投稿する」をクリックすると、投稿に失敗し、エラーメッセージが表示されること" do
-        fill_in "post[text]", with: ""
-        within ".chat-form" do
-          click_on "投稿する"
-        end
-        within ".chat-list" do
-          expect(page).not_to have_content another_post.text
-        end
-        expect(page).to have_content "投稿できませんでした"
+        expect do
+          fill_in "post[text]", with: ""
+          within ".chat-form" do
+            click_on "投稿する"
+          end
+          within ".chat-list" do
+            expect(page).not_to have_content another_post.text
+          end
+          expect(page).to have_content "投稿できませんでした"
+        end.not_to change { Post.count }
       end
 
-      it "「☆」をクリックすると、「★」に変わること" do
-        within "#chat-list-item-2 #chat-keep-button-#{post_with_reply_to.id}" do
-          find(".like-not-created").click
+      context "自分が投稿したチャットである場合" do
+        it "「削除」が表示されること" do
+          within "#chat-list-item-1" do
+            expect(page).to have_content "削除"
+          end
         end
-        within ".like-created" do
-          expect(page).to have_content "★"
-          expect(page).not_to have_content "☆"
+
+        it "「削除」をクリックすると、確認ダイアログが表示されること" do
+          page.dismiss_confirm("チャットを削除します、よろしいですか？") do
+            click_on "削除"
+          end
+        end
+
+        it "「削除」をクリックし、表示された確認ダイアログで「OK」をクリックすると、チャットが削除されること" do
+          expect do
+            page.accept_confirm("チャットを削除します、よろしいですか？") do
+              click_on "削除"
+            end
+            expect(current_path).to eq game_path(game)
+            expect(page).to have_content "チャットを削除しました"
+          end.to change { Post.count }.by(-1)
         end
       end
 
-      it "「★」をクリックすると、「☆」に変わること" do
-        within "#chat-list-item-1 #chat-keep-button-#{post.id}" do
-          find(".like-created").click
+      context "他のユーザーが投稿したチャットである場合" do
+        it "「削除」が表示されないこと" do
+          within "#chat-list-item-2" do
+            expect(page).not_to have_content "削除"
+          end
         end
-        within ".like-not-created" do
-          expect(page).to have_content "☆"
-          expect(page).not_to have_content "★"
-        end
+      end
+
+      it "「☆」をクリックすると、「★」に変わり、Likeモデルのレコードが一つ増えること" do
+        expect do
+          within "#chat-list-item-2 #chat-keep-button-#{post_with_reply_to.chat_num}" do
+            find(".like-not-created").click
+          end
+          within ".like-created" do
+            expect(page).to have_content "★"
+            expect(page).not_to have_content "☆"
+          end
+        end.to change { Like.count }.by(1)
+      end
+
+      it "「★」をクリックすると、「☆」に変わり、Likeモデルのレコードが一つ減ること" do
+        expect do
+          within "#chat-list-item-1 #chat-keep-button-#{post.chat_num}" do
+            find(".like-created").click
+          end
+          within ".like-not-created" do
+            expect(page).to have_content "☆"
+            expect(page).not_to have_content "★"
+          end
+        end.to change { Like.count }.by(-1)
       end
 
       it "「返信」をクリックすると、テキストエリア内に「>> + 返信先のチャットの番号」が表示されること" do
