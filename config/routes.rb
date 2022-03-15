@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       get 'list'
       get 'search'
     end
-    resources :posts, only: :create do
+    resources :posts, only: [:create, :destroy] do
       resource :likes, only: [:create, :destroy]
     end
   end
