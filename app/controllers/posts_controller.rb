@@ -12,11 +12,23 @@ class PostsController < ApplicationController
     end
   end
 
+  def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+    redirect_to game_path(params[:game_id]), notice: "チャットを削除しました"
+  end
+
   private
 
   def post_params
-    params.require(:post).permit(:text).merge(
-      user_id: current_user.id, game_id: @game.id, chat_num: @posts.count + 1
-    )
+    if @posts.first
+      params.require(:post).permit(:text).merge(
+        user_id: current_user.id, game_id: @game.id, chat_num: @posts.first.chat_num + 1
+      )
+    else
+      params.require(:post).permit(:text).merge(
+        user_id: current_user.id, game_id: @game.id, chat_num: 1
+      )
+    end
   end
 end
