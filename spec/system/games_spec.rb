@@ -312,6 +312,33 @@ RSpec.describe "Games", type: :system, js: true do
     end
 
     describe "表示テスト" do
+      describe "掲示板の用途の画像" do
+        let(:game_trade) { create(:game, purpose: "交換") }
+        let(:game_match) { create(:game, purpose: "対戦") }
+        let(:game_cooperation) { create(:game, purpose: "マルチプレイ募集") }
+
+        context "掲示板の用途が「交換」の場合" do
+          it "「交換」の画像が表示されること" do
+            visit game_path(game_trade)
+            expect(page).to have_selector "img[src*='trade']"
+          end
+        end
+
+        context "掲示板の用途が「対戦」の場合" do
+          it "「対戦」の画像が表示されること" do
+            visit game_path(game_match)
+            expect(page).to have_selector "img[src*='match']"
+          end
+        end
+
+        context "掲示板の用途が「マルチプレイ募集」の場合" do
+          it "「マルチプレイ募集」の画像が表示されること" do
+            visit game_path(game_cooperation)
+            expect(page).to have_selector "img[src*='cooperation']"
+          end
+        end
+      end
+
       it "ゲーム名と掲示板の用途が表示されること" do
         within ".chat-section h1" do
           expect(page).to have_content game.name
@@ -369,6 +396,23 @@ RSpec.describe "Games", type: :system, js: true do
           end
           expect(page).to have_content "投稿できませんでした"
         end.not_to change { Post.count }
+      end
+
+      it "検索フォームに値を入力して「検索」をクリックすると、検索条件に該当するチャットのみが表示されること" do
+        search_params = {
+          q: {
+            created_at_gteq: Date.current,
+            created_at_lteq_end_of_day: Date.current + 1,
+            text_cont: "返信チャット",
+          },
+        }
+        fill_in "q[created_at_gteq]", with: search_params[:q][:created_at_gteq]
+        fill_in "q[created_at_lteq_end_of_day]",
+          with: search_params[:q][:created_at_lteq_end_of_day]
+        fill_in "q[text_cont]", with: search_params[:q][:text_cont]
+        click_on "検索"
+        expect(page).to have_content post_with_reply_to.text
+        expect(page).not_to have_content post.text
       end
 
       context "自分が投稿したチャットである場合" do

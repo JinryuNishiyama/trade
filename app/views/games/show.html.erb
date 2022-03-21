@@ -1,4 +1,11 @@
 <div class="chat-section">
+  <% if @game.purpose == "交換" %>
+    <%= image_tag "trade.png", class: "game-purpose-image" %>
+  <% elsif @game.purpose == "対戦" %>
+    <%= image_tag "match.png", class: "game-purpose-image" %>
+  <% elsif @game.purpose == "マルチプレイ募集" %>
+    <%= image_tag "cooperation.png", class: "game-purpose-image" %>
+  <% end %>
   <h1><span><%= @game.name %></span><%= @game.purpose %>掲示板</h1>
   <p><%= @game.description %></p>
   <%= form_with model: [@game, @post], class: "chat-form" do |f| %>
@@ -6,6 +13,13 @@
     <%= render "shared/error_messages", resource: @post %>
     <%= f.text_area :text, class: "chat-text-area" %>
     <%= f.submit "投稿する", class: "chat-submit" %>
+  <% end %>
+  <%= search_form_for @q, url: game_path(@game), method: :get, class: "chat-search-form" do |f| %>
+    <h3>チャット検索</h3>
+    <%= f.date_field :created_at_gteq, class: "chat-search-date-field" %>〜
+    <%= f.date_field :created_at_lteq_end_of_day, class: "chat-search-date-field" %>
+    <%= f.search_field :text_cont, placeholder: "キーワード検索", class: "chat-search-field" %>
+    <%= f.submit "検索", class: "chat-search-submit" %>
   <% end %>
   <ol class="chat-list">
     <li id="chat-list-item-header">
