@@ -1,7 +1,8 @@
 class PostsController < ApplicationController
   def create
     @game = Game.find(params[:game_id])
-    @posts = @game.posts.includes(:user).order("created_at desc")
+    @q = @game.posts.ransack(params[:q])
+    @posts = @q.result.includes(:user).order("created_at desc")
     @post = Post.new(post_params)
 
     if @post.save
