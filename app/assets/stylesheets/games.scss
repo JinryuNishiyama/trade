@@ -219,6 +219,12 @@
   }
 }
 
+@media screen and (max-width: 575px) {
+  .game-purpose-image {
+    width: 100%;
+  }
+}
+
 .chat-section h1, .chat-section > p {
   margin-bottom: 20px;
 }

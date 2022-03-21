@@ -1,4 +1,11 @@
 <div class="chat-section">
+  <% if @game.purpose == "交換" %>
+    <%= image_tag "trade.png", class: "game-purpose-image" %>
+  <% elsif @game.purpose == "対戦" %>
+    <%= image_tag "match.png", class: "game-purpose-image" %>
+  <% elsif @game.purpose == "マルチプレイ募集" %>
+    <%= image_tag "cooperation.png", class: "game-purpose-image" %>
+  <% end %>
   <h1><span><%= @game.name %></span><%= @game.purpose %>掲示板</h1>
   <p><%= @game.description %></p>
   <%= form_with model: [@game, @post], class: "chat-form" do |f| %>
