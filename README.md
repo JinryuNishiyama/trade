@@ -32,7 +32,9 @@ __3. チャットを投稿__
 
 * チャットページ
 
-![チャットページのスクリーンショット](docs/images/screenshot_chat_page.png)
+![チャットページのスクリーンショット1](docs/images/screenshot_chat_page_1.png)
+
+![チャットページのスクリーンショット2](docs/images/screenshot_chat_page_2.png)
 
 ## 開発環境
 
