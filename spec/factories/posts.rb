@@ -14,7 +14,7 @@ FactoryBot.define do
     end
 
     trait :with_reply_to do
-      text { ">>1テスト用返信チャットです。" }
+      text { ">>1\nテスト用返信チャットです。" }
     end
   end
 end
