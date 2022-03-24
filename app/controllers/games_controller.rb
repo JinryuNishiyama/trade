@@ -1,12 +1,15 @@
 class GamesController < ApplicationController
-  MAX_GAMES_COUNT = 5
+  MAX_GAME_NAMES_COUNT = 5
+  MAX_GAME_GENRES_COUNT = 3
 
   before_action :authenticate_user!, except: :index
   before_action :ensure_correct_user, only: [:edit, :update]
 
   def index
-    @games = Game.joins(:posts).select(:name).group(:name).order("count(text) desc").
-      limit(MAX_GAMES_COUNT)
+    @game_names = Game.joins(:posts).select(:name).group(:name).order("count(text) desc").
+      limit(MAX_GAME_NAMES_COUNT)
+    @game_genres = Game.select(:genre).group(:genre).order("count(genre) desc").
+      limit(MAX_GAME_GENRES_COUNT)
     @q = Game.ransack(params[:q])
   end
 
