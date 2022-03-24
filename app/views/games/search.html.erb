@@ -1,5 +1,5 @@
 <div class="game-search-section">
-  <h2 class="game-search-word">検索ワード：<%= params[:q][:name_cont] if params[:q] %></h2>
+  <h2 class="game-search-word">検索ワード：<%= keyword(:name_cont, :genre_eq) %></h2>
   <h2 class="game-search-count">検索結果（<%= @games.count %>件）</h2>
   <ul class="game-search-list">
     <% @games.each do |game| %>
