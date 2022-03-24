@@ -17,7 +17,7 @@
 /* ===========================
   1. index.html.erb
 =========================== */
-.game-list {
+.top-game-list {
   background-color: white;
   width: calc(33% - 60px);
   padding: 30px;
@@ -25,26 +25,26 @@
 }
 
 @media screen and (max-width: 767px) {
-  .game-list {
+  .top-game-list {
     order: 2;
     width: calc(100% - 60px);
     margin-right: 0;
   }
 }
 
-.game-name-search, .game-list-item {
+.top-game-list-item {
   border-bottom: 2px solid black;
   margin-bottom: 20px;
 }
 
-.game-name-search p, .game-list-item p {
+.top-game-list-item p {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 20px;
 }
 
-.search-form {
+.name-search-form, .genre-search-form {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -67,26 +67,26 @@
   padding: 7px 0;
 }
 
-.game-list-item ul {
+.top-game-list-item ul {
   padding-left: 20px;
 }
 
-.game-list-item ul li {
+.top-game-list-item ul li {
   margin-bottom: 20px;
 }
 
-.game-link {
+.top-game-link {
   transition-duration: 0.2s;
   text-decoration: none;
   color: blue;
 }
 
-.game-link:hover {
+.top-game-link:hover {
   transition-duration: 0.2s;
   color: #00bfff;
 }
 
-.new-game-link {
+.top-new-game-link {
   display: block;
   text-align: center;
   text-decoration: none;

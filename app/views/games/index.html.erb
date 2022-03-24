@@ -1,22 +1,38 @@
-<div class="game-list">
-  <div class="game-name-search">
+<div class="top-game-list">
+  <div class="top-game-list-item">
     <p>ゲーム検索</p>
-    <%= search_form_for @q, url: search_games_path, method: :get, class: "search-form" do |f| %>
+    <%= search_form_for @q, url: search_games_path, method: :get, class: "name-search-form" do |f| %>
       <%= f.search_field :name_cont, placeholder: "ゲーム名で検索", class: "search-field" %>
       <%= f.submit "検索", class: "search-submit" %>
     <% end %>
+    <%= search_form_for @q, url: search_games_path, method: :get, class: "genre-search-form" do |f| %>
+      <%= f.search_field :genre_eq, placeholder: "ジャンルで検索", class: "search-field" %>
+      <%= f.submit "検索", class: "search-submit" %>
+    <% end %>
   </div>
-  <div class="game-list-item">
+  <div class="top-game-list-item">
     <p>人気のゲーム</p>
     <ul>
-      <% @games.each do |game| %>
+      <% @game_names.each do |game| %>
         <li>
-          <%= link_to game.name, search_games_path(@q, "q[name_cont]": game.name), class: "game-link" %>
+          <%= link_to game.name, search_games_path(@q, "q[name_cont]": game.name), class: "top-game-link" %>
         </li>
       <% end %>
     </ul>
   </div>
-  <%= link_to "新しい掲示板を作成", new_game_path, class: "new-game-link" %>
+  <div class="top-game-list-item">
+    <p>主なジャンル</p>
+    <ul>
+      <% @game_genres.each do |game| %>
+        <% if game.genre %>
+          <li>
+            <%= link_to game.genre, search_games_path(@q, "q[genre_eq]": game.genre), class: "top-game-link" %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+  <%= link_to "新しい掲示板を作成", new_game_path, class: "top-new-game-link" %>
 </div>
 <div class="top-main">
   <div class="about">
