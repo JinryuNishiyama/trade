@@ -1,4 +1,12 @@
 module GamesHelper
+  def keyword(*columns)
+    words = []
+    (0..columns.size - 1).each do |index|
+      words[index] = params[:q][columns[index]] if params[:q]
+    end
+    words.compact.join(",")
+  end
+
   def generate_link(text, game)
     reply_to = text.slice(/>>[0-9]+/)
     if reply_to
