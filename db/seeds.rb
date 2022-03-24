@@ -51,6 +51,7 @@ games = Game.create!(
     # games[0]
     {
       name: "ゲーム1",
+      genre: "その他",
       purpose: "交換",
       description: "ゲーム1の交換掲示板です。",
       user: users[1],
@@ -65,6 +66,7 @@ games = Game.create!(
     # games[2]
     {
       name: "ゲーム3",
+      genre: "パズル",
       purpose: "交換",
       description: "ゲーム3の交換掲示板です。",
       user: users[1],
@@ -72,6 +74,7 @@ games = Game.create!(
     # games[3]
     {
       name: "ホゲホゲモンスター",
+      genre: "RPG",
       purpose: "交換",
       description: "ホゲホゲモンスターの交換掲示板",
       user: users[2],
@@ -79,6 +82,7 @@ games = Game.create!(
     # games[4]
     {
       name: "ホゲホゲモンスター",
+      genre: "RPG",
       purpose: "対戦",
       description: "ホゲホゲモンスターの対戦掲示板",
       user: users[2],
@@ -86,6 +90,7 @@ games = Game.create!(
     # games[5]
     {
       name: "ホゲホゲモンスター",
+      genre: "RPG",
       purpose: "マルチプレイ募集",
       description: "ホゲホゲモンスターのマルチプレイ募集掲示板",
       user: users[2],
@@ -93,6 +98,7 @@ games = Game.create!(
     # games[6]
     {
       name: "ホゲホゲクエスト",
+      genre: "RPG",
       purpose: "対戦",
       description: "対戦相手募集",
       user: users[3],
@@ -100,6 +106,7 @@ games = Game.create!(
     # games[7]
     {
       name: "ホゲホゲドラゴンズ",
+      genre: "パズル",
       purpose: "マルチプレイ募集",
       description: "マルチプレイ募集します！",
       user: users[3],
