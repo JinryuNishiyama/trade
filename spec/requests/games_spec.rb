@@ -6,6 +6,9 @@ RSpec.describe "Games", type: :request do
 
   describe "GET #index" do
     let!(:games_with_post) { create_list(:game, 6, :with_post) }
+    let!(:games_with_genre1) { create_list(:game, 1, genre: "ジャンル1") }
+    let!(:games_with_genre2) { create_list(:game, 2, genre: "ジャンル2") }
+    let!(:games_with_genre3) { create_list(:game, 3, genre: "ジャンル3") }
 
     before do
       get root_path
@@ -25,6 +28,16 @@ RSpec.describe "Games", type: :request do
 
     it "6件目以降のゲーム名が表示されないこと" do
       expect(response.body).not_to include games_with_post.last.name
+    end
+
+    it "属しているゲームが多いジャンルが上から3つまで表示されること" do
+      expect(response.body).to include "テストジャンル"
+      expect(response.body).to include "ジャンル2"
+      expect(response.body).to include "ジャンル3"
+    end
+
+    it "属しているゲームが多いジャンル上から3つ以外は表示されないこと" do
+      expect(response.body).not_to include "ジャンル1"
     end
 
     context "ログインしていない場合" do
@@ -287,18 +300,44 @@ RSpec.describe "Games", type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it "検索ワードがゲーム名に含まれる掲示板の情報が表示されること" do
-      search_params = { q: { name_cont: "別の" } }
-      get search_games_path, params: search_params
-      expect(response.body).to include another_game.name
-      expect(response.body).to include another_game.purpose
-      expect(response.body).to include another_game.description
+    context "ゲーム名で検索する場合" do
+      let(:search_params) do
+        { q: { name_cont: "別の" } }
+      end
+
+      before do
+        get search_games_path, params: search_params
+      end
+
+      it "検索ワードがゲーム名に含まれる掲示板の情報が表示されること" do
+        expect(response.body).to include another_game.name
+        expect(response.body).to include another_game.purpose
+        expect(response.body).to include another_game.description
+      end
+
+      it "検索ワードがゲーム名に含まれない掲示板の情報が表示されないこと" do
+        expect(response.body).not_to include game.name
+      end
     end
 
-    it "検索ワードがゲーム名に含まれない掲示板の情報が表示されないこと" do
-      search_params = { q: { name_cont: "別の" } }
-      get search_games_path, params: search_params
-      expect(response.body).not_to include game.name
+    context "ジャンルで検索する場合" do
+      let(:search_params) do
+        { q: { genre_eq: "別のジャンル" } }
+      end
+
+      before do
+        get search_games_path, params: search_params
+      end
+
+      it "検索ワードのジャンルに属する掲示板の情報が表示されること" do
+        expect(response.body).to include another_game.name
+        expect(response.body).to include another_game.purpose
+        expect(response.body).to include another_game.description
+      end
+
+      it "検索ワードのジャンルに属さない掲示板の情報が表示されないこと" do
+        expect(response.body).not_to include game.name
+      end
     end
   end
 end
