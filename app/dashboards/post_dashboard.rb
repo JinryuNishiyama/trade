@@ -15,6 +15,7 @@ class PostDashboard < Administrate::BaseDashboard
     text: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    chat_num: Field::Number,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -39,6 +40,7 @@ class PostDashboard < Administrate::BaseDashboard
     text
     created_at
     updated_at
+    chat_num
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -49,6 +51,7 @@ class PostDashboard < Administrate::BaseDashboard
     game
     likes
     text
+    chat_num
   ].freeze
 
   # COLLECTION_FILTERS

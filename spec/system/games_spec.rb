@@ -6,6 +6,9 @@ RSpec.describe "Games", type: :system, js: true do
 
   describe "トップページ" do
     let!(:games_with_post) { create_list(:game, 6, :with_post) }
+    let!(:games_with_genre1) { create_list(:game, 1, genre: "ジャンル1") }
+    let!(:games_with_genre2) { create_list(:game, 2, genre: "ジャンル2") }
+    let!(:games_with_genre3) { create_list(:game, 3, genre: "ジャンル3") }
 
     before do
       visit root_path
@@ -24,6 +27,16 @@ RSpec.describe "Games", type: :system, js: true do
         expect(page).not_to have_content games_with_post.last.name
       end
 
+      it "属しているゲームが多いジャンルが上から3つまで表示されること" do
+        expect(page).to have_content "テストジャンル"
+        expect(page).to have_content "ジャンル2"
+        expect(page).to have_content "ジャンル3"
+      end
+
+      it "属しているゲームが多いジャンル上から3つ以外は表示されないこと" do
+        expect(page).not_to have_content "ジャンル1"
+      end
+
       context "ログインしていない場合" do
         it "ヘッダー内に「ログイン」・「新規登録」が表示されること" do
           within "header" do
@@ -37,6 +50,10 @@ RSpec.describe "Games", type: :system, js: true do
             expect(page).not_to have_content user.name
             expect(page).not_to have_selector "img[src$='test.jpg']"
           end
+        end
+
+        it "アカウント登録を促す注意書きが表示されること" do
+          expect(page).to have_css ".note"
         end
       end
 
@@ -86,6 +103,10 @@ RSpec.describe "Games", type: :system, js: true do
             expect(page).not_to have_content "新規登録"
           end
         end
+
+        it "アカウント登録を促す注意書きが表示されないこと" do
+          expect(page).not_to have_css ".note"
+        end
       end
 
       context "管理者権限を持ったユーザーでログインしている場合" do
@@ -118,12 +139,48 @@ RSpec.describe "Games", type: :system, js: true do
           expect(current_path).to eq new_user_registration_path
         end
 
-        it "検索ワードを入力して「検索」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
+        it "ゲーム名を入力して「検索」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
           search_params = { q: { name_cont: "あ" } }
-          within ".search-form" do
+          within ".name-search-form" do
             fill_in "q[name_cont]", with: search_params[:q][:name_cont]
             click_on "検索"
           end
+          expect(page).to have_content "You need to sign in or sign up before continuing."
+          within ".account-section h1" do
+            expect(page).to have_content "ログイン"
+          end
+        end
+
+        it "ジャンルを入力して「検索」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
+          search_params = { q: { genre_eq: "あ" } }
+          within ".genre-search-form" do
+            fill_in "q[genre_eq]", with: search_params[:q][:genre_eq]
+            click_on "検索"
+          end
+          expect(page).to have_content "You need to sign in or sign up before continuing."
+          within ".account-section h1" do
+            expect(page).to have_content "ログイン"
+          end
+        end
+
+        it "ゲーム名をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
+          click_on games_with_post.first.name
+          expect(page).to have_content "You need to sign in or sign up before continuing."
+          within ".account-section h1" do
+            expect(page).to have_content "ログイン"
+          end
+        end
+
+        it "ジャンルをクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
+          click_on "テストジャンル"
+          expect(page).to have_content "You need to sign in or sign up before continuing."
+          within ".account-section h1" do
+            expect(page).to have_content "ログイン"
+          end
+        end
+
+        it "「新しい掲示板を作成」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
+          click_on "新しい掲示板を作成"
           expect(page).to have_content "You need to sign in or sign up before continuing."
           within ".account-section h1" do
             expect(page).to have_content "ログイン"
@@ -142,22 +199,6 @@ RSpec.describe "Games", type: :system, js: true do
             click_on "こちら"
           end
           expect(current_path).to eq new_user_session_path
-        end
-
-        it "ゲーム名をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
-          click_on games_with_post.first.name
-          expect(page).to have_content "You need to sign in or sign up before continuing."
-          within ".account-section h1" do
-            expect(page).to have_content "ログイン"
-          end
-        end
-
-        it "「新しい掲示板を作成」をクリックすると、ログインページのテンプレートが表示され、エラーメッセージが表示されること" do
-          click_on "新しい掲示板を作成"
-          expect(page).to have_content "You need to sign in or sign up before continuing."
-          within ".account-section h1" do
-            expect(page).to have_content "ログイン"
-          end
         end
       end
 
@@ -191,33 +232,31 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_content "Signed out successfully."
         end
 
-        it "検索ワードを入力して「検索」をクリックすると、掲示板検索結果ページに遷移すること" do
+        it "ゲーム名を入力して「検索」をクリックすると、掲示板検索結果ページに遷移すること" do
           search_params = { q: { name_cont: "あ" } }
-          within ".search-form" do
+          within ".name-search-form" do
             fill_in "q[name_cont]", with: search_params[:q][:name_cont]
             click_on "検索"
           end
           expect(current_path).to eq search_games_path
         end
 
-        it "「アカウント登録はこちらから」の「こちら」をクリックすると、アカウント登録ページに遷移せず、エラーメッセージが表示されること" do
-          within ".note-registration" do
-            click_on "こちら"
+        it "ジャンルを入力して「検索」をクリックすると、掲示板検索結果ページに遷移すること" do
+          search_params = { q: { genre_eq: "あ" } }
+          within ".genre-search-form" do
+            fill_in "q[genre_eq]", with: search_params[:q][:genre_eq]
+            click_on "検索"
           end
-          expect(page).to have_content "You are already signed in."
-          expect(current_path).to eq root_path
-        end
-
-        it "「ログインはこちらから」の「こちら」をクリックすると、ログインページに遷移せず、エラーメッセージが表示されること" do
-          within ".note-login" do
-            click_on "こちら"
-          end
-          expect(page).to have_content "You are already signed in."
-          expect(current_path).to eq root_path
+          expect(current_path).to eq search_games_path
         end
 
         it "ゲーム名をクリックすると、掲示板検索結果ページに遷移すること" do
           click_on games_with_post.first.name
+          expect(current_path).to eq search_games_path
+        end
+
+        it "ジャンルをクリックすると、掲示板検索結果ページに遷移すること" do
+          click_on "テストジャンル"
           expect(current_path).to eq search_games_path
         end
 
@@ -576,28 +615,92 @@ RSpec.describe "Games", type: :system, js: true do
 
     before do
       sign_in_as(user)
-      visit search_games_path("q[name_cont]": "別の")
     end
 
     describe "表示テスト" do
-      it "検索結果の件数が表示されること" do
-        within ".game-search-count" do
-          expect(page).to have_content "1"
+      context "ゲーム名で検索する場合" do
+        before do
+          visit search_games_path("q[name_cont]": "別の")
+        end
+
+        it "検索ワードが表示されること" do
+          within ".game-search-word" do
+            expect(page).to have_content "別の"
+          end
+        end
+
+        it "検索結果の件数が表示されること" do
+          within ".game-search-count" do
+            expect(page).to have_content "1"
+          end
+        end
+
+        it "検索ワードがゲーム名に含まれる掲示板の情報が表示されること" do
+          expect(page).to have_content another_game.name
+          expect(page).to have_content another_game.purpose
+          expect(page).to have_content another_game.description
+        end
+
+        it "検索ワードがゲーム名に含まれない掲示板の情報が表示されないこと" do
+          expect(page).not_to have_content game.name
         end
       end
 
-      it "検索ワードがゲーム名に含まれる掲示板の情報が表示されること" do
-        expect(page).to have_content another_game.name
-        expect(page).to have_content another_game.purpose
-        expect(page).to have_content another_game.description
+      context "ジャンルで検索する場合" do
+        before do
+          visit search_games_path("q[genre_eq]": "別のジャンル")
+        end
+
+        it "検索ワードが表示されること" do
+          within ".game-search-word" do
+            expect(page).to have_content "別のジャンル"
+          end
+        end
+
+        it "検索結果の件数が表示されること" do
+          within ".game-search-count" do
+            expect(page).to have_content "1"
+          end
+        end
+
+        it "検索ワードのジャンルに属する掲示板の情報が表示されること" do
+          expect(page).to have_content another_game.name
+          expect(page).to have_content another_game.purpose
+          expect(page).to have_content another_game.description
+        end
+
+        it "検索ワードのジャンルに属さない掲示板の情報が表示されないこと" do
+          expect(page).not_to have_content game.name
+        end
       end
 
-      it "検索ワードがゲーム名に含まれない掲示板の情報が表示されないこと" do
-        expect(page).not_to have_content game.name
+      context "検索ワードなしで検索する場合" do
+        before do
+          visit search_games_path("q[name_cont]": "")
+        end
+
+        it "検索結果の件数が表示されること" do
+          within ".game-search-count" do
+            expect(page).to have_content "2"
+          end
+        end
+
+        it "全ての掲示板の情報が表示されること" do
+          expect(page).to have_content game.name
+          expect(page).to have_content game.purpose
+          expect(page).to have_content game.description
+          expect(page).to have_content another_game.name
+          expect(page).to have_content another_game.purpose
+          expect(page).to have_content another_game.description
+        end
       end
     end
 
     describe "ページ遷移テスト" do
+      before do
+        visit search_games_path("q[name_cont]": "別の")
+      end
+
       it "検索結果の枠内をクリックすると、チャットページに遷移すること" do
         find(".game-search-item").click
         expect(current_path).to eq game_path(another_game)

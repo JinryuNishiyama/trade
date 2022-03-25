@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :game do
     name { "テストゲーム" }
+    genre { "テストジャンル" }
     purpose { "テスト" }
     description { "テスト用説明文です。" }
     association :user
@@ -30,6 +31,7 @@ FactoryBot.define do
 
   factory :another_game, class: "Game" do
     name { "別のゲーム" }
+    genre { "別のジャンル" }
     purpose { "別のテスト" }
     description { "別のテスト用説明文です。" }
     association :user

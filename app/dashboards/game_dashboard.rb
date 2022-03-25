@@ -16,6 +16,7 @@ class GameDashboard < Administrate::BaseDashboard
     description: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    genre: Field::String,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -41,6 +42,7 @@ class GameDashboard < Administrate::BaseDashboard
     description
     created_at
     updated_at
+    genre
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -52,6 +54,7 @@ class GameDashboard < Administrate::BaseDashboard
     name
     purpose
     description
+    genre
   ].freeze
 
   # COLLECTION_FILTERS
